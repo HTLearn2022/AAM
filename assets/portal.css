@@ -34,3 +34,18 @@ dialog{border:1px solid #c6d8e8;border-radius:14px;padding:24px;max-width:min(90
 @media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;gap:10px;padding:14px}.sidebar-note{display:none}#navLinks{display:flex;overflow:auto;gap:5px}.nav-link{flex:none;padding:10px}.two,.two-even,.map-wrap{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.metrics,.form,.permission-grid,.role-picker,.wxgrid{grid-template-columns:1fr}.content{padding:13px}.login-card{padding:18px}.top h1{font-size:21px}.map-pin{font-size:8px;padding:2px 3px}th,td{padding:8px}}
 @media print{.sidebar,.account,.btn,.form,.demo-label,#loginOverlay,.nav-link{display:none!important}.shell{display:block}.section{display:none!important}.section.active{display:block!important}body{background:#fff}.panel{break-inside:avoid}}
+
+
+/* Collapsible departmental navigation. */
+.sidebar .collapse-control{align-self:flex-end;background:#203d63;color:white;border:1px solid #52769f;border-radius:8px;padding:7px 11px;font-weight:800;font-size:16px;cursor:pointer}
+.shell.collapsed{grid-template-columns:74px minmax(0,1fr)}
+.shell.collapsed .sidebar{padding:16px 8px}
+.shell.collapsed .brand,.shell.collapsed .nav-title,.shell.collapsed .sidebar-note{display:none}
+.shell.collapsed .nav-link{font-size:0;line-height:1;text-align:center;padding:13px 7px}
+.shell.collapsed .nav-link em{font-size:20px;margin:0}
+.shell.collapsed .sidebar .collapse-control{align-self:center}
+.tab-strip{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+.tab-button{border:1px solid #c7d7e7;border-radius:9px;background:#fff;padding:10px 15px;color:#224e7e;font-weight:750}
+.tab-button.active{background:#155e9a;color:#fff;border-color:#155e9a}
+#loginOverlay[hidden]{display:none!important}
+@media(max-width:850px){.shell.collapsed{display:block}.shell.collapsed .sidebar{padding:14px}.shell.collapsed .brand{display:block}.shell.collapsed .nav-link{font-size:12px;line-height:1.5;padding:10px}.shell.collapsed .nav-link em{font-size:14px;margin-right:6px}}
