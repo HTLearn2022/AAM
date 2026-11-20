@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b254b">
+<meta name="description" content="Airport Airside Manager — fictional JSR International Airport interactive demonstration.">
+<title>Airport Airside Manager — JIA Operations Hub</title>
+<style>
+:root{--navy:#0b254b;--navy2:#103b77;--blue:#1d6fd6;--yellow:#f2c400;--green:#177847;--paper:#f3f6fb;--ink:#182640;--muted:#5f6f84;--line:#dfe6ef;--white:#fff;--danger:#b42318;--warn:#b65c00}
+*{box-sizing:border-box}html{scroll-behaviour:smooth}body{margin:0;color:var(--ink);background:var(--paper);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}a{color:inherit}button,input{font:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #62a4ff;outline-offset:3px}.wrap{max-width:1360px;margin:auto;display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+aside{background:var(--navy);color:white;padding:28px 17px 20px;display:flex;flex-direction:column;gap:30px}.brand{display:flex;gap:12px;align-items:center}.mark{width:41px;height:41px;display:grid;place-items:center;border:2px solid var(--yellow);border-radius:12px;color:var(--yellow);font-size:14px;font-weight:900;letter-spacing:-1px}.brand h1{font-size:18px;line-height:1.25;margin:0}.brand p{font-size:11px;letter-spacing:1.9px;color:#b5d1f5;margin:2px 0 0;text-transform:uppercase}.menu-heading{font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:2px;color:#8bafd9;padding:0 10px}.menu{display:grid;gap:5px;margin-top:10px}.menu a{display:flex;align-items:center;gap:10px;color:#d6e4f7;border-radius:10px;text-decoration:none;padding:12px 11px;font-size:13px;font-weight:650}.menu a:hover,.menu a:focus-visible{background:#1b477f;color:white}.menu a.current{background:#1f528f;color:white;border-left:3px solid var(--yellow)}.menu a .sym{font-size:17px;width:24px;text-align:center;line-height:1}.side-note{margin-top:auto;border:1px solid #356399;background:#173760;border-radius:12px;padding:15px;color:#cbdff7;font-size:12px}.side-note b{color:#fff;display:block;margin-bottom:5px}
+main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}.crumb{font-size:12px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase;color:#2b649c}.demo-tag{font-size:12px;font-weight:750;border:1px solid #e5d38a;background:#fff6ce;color:#77550b;border-radius:50px;padding:6px 12px}.hero{background:linear-gradient(110deg,#0b2b57,#16437d 73%,#1b518b);color:#fff;border-radius:18px;padding:27px 30px;position:relative;overflow:hidden}.hero::after{content:"";width:250px;height:250px;border:1px solid #ffffff22;border-radius:50%;position:absolute;right:-70px;top:-85px;box-shadow:0 0 0 45px #ffffff08,0 0 0 90px #ffffff06;pointer-events:none}.hero h2{font-size:30px;letter-spacing:-.6px;line-height:1.15;margin:7px 0 8px}.hero p{max-width:650px;color:#dae8fb;margin:0}.eyebrow{font-size:11px;letter-spacing:1.7px;text-transform:uppercase;font-weight:800;color:#fce07d}.hero-btm{margin-top:22px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;text-decoration:none;border:1px solid #d5deea;background:white;color:#17325b;padding:10px 14px;font-size:13px;font-weight:750;cursor:pointer;min-height:42px}.btn:hover{filter:brightness(.97)}.btn.yellow{background:var(--yellow);color:#182640;border:1px solid var(--yellow)}.btn.ghost{color:#fff;background:#ffffff12;border:1px solid #8caed3}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:23px 0 11px}.section-head h3{font-size:17px;letter-spacing:-.1px;margin:0}.section-head small{font-size:12px;color:var(--muted)}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px}.metric small{font-size:11px;color:#6b7a8e;font-weight:800;letter-spacing:.6px;text-transform:uppercase}.metric strong{font-size:29px;display:block;line-height:1.2;margin:6px 0 5px;font-variant-numeric:tabular-nums}.metric span{font-size:11px;color:var(--muted)}.dash-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(275px,1fr);gap:14px;margin-top:14px}.panel{background:var(--white);border:1px solid var(--line);border-radius:14px;min-width:0;overflow:hidden}.panel-h{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.panel-h h3{font-size:15px;margin:0}.panel-h small{color:var(--muted);font-size:11px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:530px}.table th{text-align:left;color:#677991;text-transform:uppercase;font-size:10px;letter-spacing:.4px;padding:12px 16px;background:#f8fafc;border-bottom:1px solid var(--line)}.table td{padding:12px 16px;border-bottom:1px solid #edf1f6;vertical-align:middle;font-size:12px}.table tr:last-child td{border-bottom:0}.flight{font-weight:750;color:#102b51;font-size:13px}.sub{font-size:11px;color:#697e95}.pill{font-size:10px;font-weight:800;border:1px solid var(--line);padding:4px 7px;border-radius:6px;white-space:nowrap;background:#f5f8fb;color:#52647c}.pill.occupied{color:#85500c;background:#fff1d8;border-color:#f6d59a}.pill.free{color:#12633b;background:#e9f8ef;border-color:#c1e6cc}.pill.issue{color:var(--danger);background:#fff0ee;border-color:#f5c0ba}.muted{color:var(--muted)}.panel-bottom{padding:13px 16px;border-top:1px solid var(--line);font-size:12px}.panel-bottom a{color:#155697;font-weight:700}.time-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:14px 16px;background:#f8faff;border-bottom:1px solid var(--line);font-size:12px}.time-row label{font-weight:750;color:#3a5575}.time-row input{padding:8px 10px;border:1px solid #c9d7e9;border-radius:9px;background:white;min-height:39px}.time-row button{border:1px solid #c9d7e9;border-radius:9px;padding:8px 10px;color:#1b4c85;background:white;cursor:pointer;font-size:12px;font-weight:750}.apron{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:15px}.bay{border:1px solid #cce1d5;border-left:5px solid #2b9660;background:#f6fcf8;border-radius:9px;padding:11px;min-width:0}.bay.busy{border-color:#f6ddb4;border-left-color:#d69a24;background:#fffaf0}.bay b{display:block;font-size:12px}.bay span{display:block;font-size:11px;color:var(--muted);margin-top:3px;word-break:break-word}.note{padding:12px 16px;font-size:11px;color:#63758a;background:#fcfdff;border-top:1px solid var(--line)}.modules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.module{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;min-width:0}.module:hover{border-color:#a6c9e9}.module .symbol{width:39px;height:39px;border-radius:11px;background:#edf4ff;display:grid;place-items:center;color:#155ca9;margin-bottom:14px}.module h4{font-size:15px;margin:0 0 6px}.module p{font-size:12px;color:var(--muted);margin:0 0 17px;flex:1}.module a{font-size:12px;color:#0e5b9d;font-weight:800;text-decoration:none}.module a:hover{text-decoration:underline}.tiny{font-size:12px;color:var(--muted)}.workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.step{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}.step span{display:inline-block;color:#225b99;font-size:11px;font-weight:850;letter-spacing:.7px}.step strong{display:block;margin:5px 0;font-size:13px}.step p{margin:0;color:var(--muted);font-size:12px}.footer{margin-top:28px;border-top:1px solid var(--line);padding-top:17px;font-size:11px;color:#60748c;display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}
+@media(max-width:1050px){.wrap{grid-template-columns:215px 1fr}main{padding:22px}.metrics{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:1fr}.modules{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.wrap{display:block}aside{padding:14px 16px;gap:12px}.brand{justify-content:space-between}.side-note{display:none}.menu-heading{display:none}.menu{display:flex;overflow:auto;gap:5px;margin-top:0}.menu a{flex:none;padding:9px 11px}.menu a .sym{display:none}main{padding:17px}.hero{padding:22px}.hero h2{font-size:24px}.modules{grid-template-columns:1fr}.workflow{grid-template-columns:1fr}.metrics{gap:9px}.metric{padding:14px}.metric strong{font-size:24px}.dash-grid{grid-template-columns:1fr}}
+@media(min-width:721px) and (max-width:950px){.modules{grid-template-columns:1fr 1fr}}
+@media print{aside,.hero-btm,.btn,.time-row,.modules,.workflow{display:none!important}.wrap{display:block}main{padding:0}.hero{color:#111;background:#fff;border:1px solid #bbb}.hero p{color:#555}.eyebrow{color:#333}.panel,.metric{break-inside:avoid}body{background:#fff}}
+
+/* Fictional diagram: status pins are derived from the same saved rule/flight data as the assignment module. */
+.map-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(240px,.9fr);gap:0}
+.map-viewport{padding:16px;background:#eef3f8}
+.map-figure{max-width:780px;margin:0 auto;position:relative}
+.map-figure img{display:block;width:100%;height:auto;border-radius:9px;border:1px solid #d5dde7}
+.map-pin{position:absolute;transform:translate(-50%,-50%);z-index:1;min-width:25px;min-height:25px;padding:4px 6px;border-radius:8px;border:2px solid #fff;box-shadow:0 2px 7px #0a254955;display:grid;place-items:center;cursor:pointer;font-size:10px;font-weight:850;line-height:1.12;max-width:90px;white-space:nowrap}
+.map-pin.available{background:#e3f9eb;color:#086b38;border-color:#2fa164}
+.map-pin.occupied{background:#fff0c7;color:#714500;border-color:#d89615}
+.map-pin.conflict{background:#ffe6e2;color:#a92019;border-color:#bd3027}
+.map-pin.reserved{background:#e6eeff;color:#184da1;border-color:#5985d6}
+.map-pin.inactive{background:#d9dfe7;color:#516071;border-color:#fff;opacity:.83}
+.map-pin:focus-visible{outline:3px solid #245da9;outline-offset:3px}
+.map-pin[aria-pressed="true"]{box-shadow:0 0 0 3px #153963,0 3px 12px #0a254966}
+.map-info{border-left:1px solid var(--line);padding:18px;background:#fbfcfe}
+.map-info h4{margin:0 0 8px;color:#152f53;font-size:15px}
+.map-info p{margin:0 0 12px;color:#586c84;font-size:12px}
+.map-info .detail{background:#fff;border:1px solid #dce5ee;border-radius:10px;padding:12px;margin:12px 0;font-size:12px;white-space:pre-line;overflow-wrap:anywhere}
+.map-legend{display:grid;gap:8px;margin:16px 0;font-size:12px}
+.map-legend span{display:flex;align-items:center;gap:9px}
+.map-legend i{display:inline-block;width:14px;height:14px;border-radius:5px;border:2px solid #fff;box-shadow:0 0 0 1px #bdcad7}
+.map-legend i.free{background:#2fa164}.map-legend i.busy{background:#d89615}.map-legend i.conflict{background:#bd3027}.map-legend i.reserve{background:#5985d6}.map-legend i.off{background:#aab5c2}
+.map-summary{font-size:12px;color:#465e7c;background:#edf4fa;border-radius:9px;padding:11px;margin-top:14px}
+.unmapped{color:#8f4e04!important}
+@media(max-width:900px){.map-layout{grid-template-columns:1fr}.map-info{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:520px){.map-viewport{padding:7px}.map-pin{min-width:15px;min-height:16px;font-size:7px;padding:2px 3px;border-width:1px;border-radius:4px;max-width:45px}}
+@media print{.map-pin{box-shadow:none}.map-layout{grid-template-columns:1.5fr 1fr}.map-info{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<aside aria-label="Demonstration navigation">
+  <div class="brand"><div class="mark" aria-hidden="true">AAM</div><div><h1>Airport Airside<br>Manager</h1><p>JSR Communications</p></div></div>
+  <div><div class="menu-heading">JIA demonstration</div><nav class="menu" aria-label="Modules">
+    <a class="current" href="index.html" aria-current="page"><span class="sym">▦</span> Operations Hub</a>
+    <a href="assignments.html"><span class="sym">✈</span> Stand & Counter Assignments</a>
+    <a href="airfield-inspection.html"><span class="sym">✓</span> Airfield Inspection</a>
+    <a href="terminal-inspection.html"><span class="sym">▤</span> Terminal Inspection</a>
+  </nav></div>
+  <div class="side-note"><b>JIA is fictional.</b>This is a public demonstration using invented flights and sample inspection workflows. It does not connect to live airport operations.</div>
+</aside>
+<main>
+  <div class="topline"><span class="crumb">Operations Hub / Overview</span><span class="demo-tag">Fictional airport · Demonstration</span></div>
+  <section class="hero" aria-label="Airport overview"><div class="eyebrow">JIA / JSR International Airport</div><h2>One view of the day's operations.</h2><p>Explore how airport teams can prepare resource assignments, review an apron plan and complete airfield or terminal inspections — in a single demonstration environment.</p><div class="hero-btm"><a class="btn yellow" href="assignments.html">Open daily assignments <span aria-hidden="true">›</span></a><a class="btn ghost" href="#modules">Explore modules</a></div></section>
+  <div class="section-head"><h3>Operations at a glance</h3><small id="dataLabel" aria-live="polite">Illustrative sample activity</small></div>
+  <section class="metrics" aria-label="Operational summary">
+    <article class="metric"><small>Flight movements</small><strong id="flightCount">13</strong><span id="flightHint">Illustrative daily schedule</span></article>
+    <article class="metric"><small>Assigned stands</small><strong id="assignedCount">–</strong><span id="assignedHint">Demonstration selections</span></article>
+    <article class="metric"><small>GA aircraft stays</small><strong id="gaCount">4</strong><span>Fictional parking register</span></article>
+    <article class="metric"><small>Inspection drafts</small><strong id="inspectionCount">0/2</strong><span>Saved on this browser only</span></article>
+  </section>
+  <section class="panel" style="margin-top:14px" aria-label="Interactive fictional apron map">
+    <div class="panel-h"><h3>JIA apron map · assignment-linked</h3><small>Fictional schematic · not to scale · reflects selected viewing time</small></div>
+    <div class="time-row"><label for="viewTime">View time</label><input id="viewTime" type="time" value="12:30"><button id="resetTime" type="button">12:30 sample</button></div>
+    <div class="map-layout">
+      <div class="map-viewport"><div class="map-figure" id="apronFigure">
+        <img src="assets/jia-demo-apron.svg" alt="Invented airport schematic showing contact stands 1 to 6, stand 7L, remote stands 7 to 10, general aviation positions G1 to G9 and a cargo apron." loading="lazy">
+        <div id="mapPins" aria-label="Select an apron position for flight or GA occupancy details"></div>
+      </div></div>
+      <aside class="map-info" aria-label="Map status and selection">
+        <h4>Apron position details</h4>
+        <p>Choose any stand or GA position on the map. Its displayed status comes from the saved assignments and the selected viewing time.</p>
+        <div id="mapSelection" class="detail" role="status" aria-live="polite">Select a position on the map to inspect its assignment.</div>
+        <div class="map-legend" aria-label="Position status legend">
+          <span><i class="free"></i> Available</span>
+          <span><i class="busy"></i> Occupied</span>
+          <span><i class="conflict"></i> Conflicting assignments</span>
+          <span><i class="reserve"></i> GA stay reserved / recorded</span>
+          <span><i class="off"></i> Not configured in current rules</span>
+        </div>
+        <div class="map-summary" id="mapSummary"></div>
+        <p class="unmapped" id="unmappedStands" hidden></p>
+        <p><a href="assignments.html" style="color:#165791;font-weight:800">Edit stand rules and assignments →</a></p>
+      </aside>
+    </div>
+    <div class="note">The map is an invented JIA illustration. Positions reflect the demonstration rules and browser-saved assignments; no aircraft location service, operational clearance or actual airport geometry is represented.</div>
+  </section>
+
+  <section class="dash-grid">
+    <div class="panel"><div class="panel-h"><h3>Flight movement board</h3><small id="planDate">Sample operating day</small></div><div class="table-wrap"><table class="table"><thead><tr><th>Flight / Type</th><th>ETA</th><th>ETD</th><th>Stand</th><th>Movement</th></tr></thead><tbody id="flightRows"><tr><td colspan="5">Loading preview data…</td></tr></tbody></table></div><div class="panel-bottom"><a href="assignments.html">Open the editable schedule and assignment controls</a> · <span class="muted">All flights fictional</span></div></div>
+    <div class="panel"><div class="panel-h"><h3>Apron occupancy preview</h3><small>Calculated from sample movement times</small></div><div class="apron" id="standGrid" aria-live="polite"></div><div class="note">Indicative stand use from ETA/ETD windows. Not a live aircraft position feed or an operational clearance.</div></div>
+  </section>
+
+  <div class="section-head" id="modules"><h3>Demonstration modules</h3><small>Available now · Separate browser-based applications</small></div>
+  <section class="modules" aria-label="Available modules">
+    <article class="module"><div class="symbol" aria-hidden="true">✈</div><h4>Daily assignments</h4><p>Load an invented flight schedule, suggest stands, adjust check-in counters and gates, print a plan and review GA parking.</p><a href="assignments.html">Open assignments →</a></article>
+    <article class="module"><div class="symbol" aria-hidden="true">✓</div><h4>Airfield inspection</h4><p>Complete day and night checklists, enter runway condition information and preview or download an inspection PDF.</p><a href="airfield-inspection.html">Open airfield log →</a></article>
+    <article class="module"><div class="symbol" aria-hidden="true">▤</div><h4>Terminal inspection</h4><p>Work through terminal checklists, capture observations and prepare a printable inspection record.</p><a href="terminal-inspection.html">Open terminal log →</a></article>
+  </section>
+  <div class="section-head"><h3>Suggested five-minute walkthrough</h3></div>
+  <section class="workflow" aria-label="Demonstration workflow"><article class="step"><span>01 · ASSIGN</span><strong>Load sample flights</strong><p>Open Daily Assignments, choose “Load sample day”, then “Suggest stands”.</p></article><article class="step"><span>02 · REVIEW</span><strong>Check the apron</strong><p>Return here to inspect saved sample assignments at different times of day.</p></article><article class="step"><span>03 · INSPECT</span><strong>Complete a checklist</strong><p>Open either inspection log, try the controls and preview a PDF report.</p></article></section>
+  <footer class="footer"><span>Airport Airside Manager (AAM) · A JSR Communications demonstration</span><span>Not for operational decision-making · No live data · No shared user accounts</span></footer>
+</main>
+</div>
+<script>
+(function(){'use strict';
+ const fallback=[
+  {ac:'DHC6',flight:'IH 101',eta:'',etd:'07:30',stand:'Stand 1',on:'dep'},
+  {ac:'DHC6',flight:'IH 102',eta:'08:10',etd:'08:40',stand:'Stand 1'},
+  {ac:'AT76',flight:'KX 310',eta:'08:45',etd:'09:35',stand:'Stand 3'},
+  {ac:'E145',flight:'CW 520',eta:'09:20',etd:'10:10',stand:'Stand 4'},
+  {ac:'C208',flight:'TC 801',eta:'10:05',etd:'10:35',stand:'Cargo'},
+  {ac:'B738',flight:'JS 204',eta:'11:40',etd:'13:00',stand:'Stand 5'},
+  {ac:'A320',flight:'CW 610',eta:'12:15',etd:'13:30',stand:'Stand 6'},
+  {ac:'DHC6',flight:'IH 105',eta:'12:40',etd:'13:05',stand:'Stand 1'},
+  {ac:'AT76',flight:'KX 314',eta:'14:20',etd:'15:05',stand:'Stand 3'},
+  {ac:'A333',flight:'JS 880',eta:'15:10',etd:'17:10',stand:'Stand 6'},
+  {ac:'E190',flight:'KX 420',eta:'16:00',etd:'16:50',stand:'Stand 5'},
+  {ac:'DHC6',flight:'IH 109',eta:'17:30',etd:'',stand:'Stand 1',on:'arr'},
+  {ac:'AT45',flight:'KX 318',eta:'19:15',etd:'',stand:'Stand 4',on:'arr'}
+ ];
+ const $$=id=>document.getElementById(id);
+ function safeRead(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}}
+ const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=String(txt);return e};
+ function fmtDate(d){return new Date(`${d}T12:00:00`).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
+ function minutes(t){if(!/^\d{2}:\d{2}$/.test(t||''))return null;const [h,m]=t.split(':').map(Number);return h<=23&&m<=59?h*60+m:null}
+ function windowFor(f,turn){const a=minutes(f.eta),d=minutes(f.etd);if(a===null&&d===null)return null;const start=a!==null?a:(f.on==='dep'?0:Math.max(0,d-turn));const end=d!==null?d:(f.on==='arr'?1439:Math.min(1439,a+turn));return [start,Math.max(end,start+1)]}
+ function active(f,t,turn){const w=windowFor(f,turn);return !!(w&&t>=w[0]&&t<w[1])}
+ function overlaps(a,b,buffer){return a[0]<b[1]+buffer&&b[0]<a[1]+buffer}
+ function status(f,t,turn){const w=windowFor(f,turn),a=minutes(f.eta),d=minutes(f.etd);if(!w)return 'Unscheduled';if(t<w[0])return 'Expected';if(t>=w[1])return 'Departed';if(a===null&&d!==null)return 'On stand / O/N';if(a!==null&&d===null)return 'On stand / O/N';return 'On stand'}
+ const MAP_POSITIONS=[
+  ['Stand 1',36.5,16.6],['Stand 2',36.5,22.4],['Stand 3',36.5,28.2],
+  ['Stand 4',36.5,34.0],['Stand 5',36.5,39.9],['Stand 6',36.5,45.7],
+  ['Stand 7L',36.5,52.1],['Stand 7',72,19.8],['Stand 8',72,28.0],
+  ['Stand 9',72,36.2],['Stand 10',72,44.4],
+  ['G1',16.0,67.4],['G2',21.4,67.4],['G3',27,67.4],['G4',32.3,67.4],['G5',37.8,67.4],
+  ['G6',20.0,74.2],['G7',25.3,74.2],['G8',30.6,74.2],['G9',36,74.2],
+  ['Cargo',68.0,74.2]
+ ];
+ let selectedMapPosition='Stand 1';
+ function mapStatus(key,state,t){
+   if(key.startsWith('G')){
+     const stays=(state.ga||[]).filter(g=>g.spot===key&&g.arr&&g.arr<=state.date&&(!g.dep||g.dep>=state.date)&&g.status!=='Departed');
+     return {key,configured:true,state:stays.length>1?'conflict':stays.length?stays.some(g=>g.status==='On the ground')?'occupied':'reserved':'available',
+       current:stays.map(g=>g.reg||'Unidentified aircraft'),description:stays.length?stays.map(g=>(g.reg||'GA aircraft')+' — '+(g.status||'Registered')+'; '+g.arr+' to '+(g.dep||'open')).join('\\n'):'No GA stay recorded for the effective date'};
+   }
+   if(!state.stands.includes(key))return {key,configured:false,state:'inactive',current:[],description:'This position is shown in the fictional map but has not been configured in the saved assignment rules.'};
+   const assigned=state.flights.filter(f=>f.stand===key);
+   const timed=assigned.filter(f=>windowFor(f,state.turn)!==null);
+   const on=timed.filter(f=>active(f,t,state.turn));
+   let hasConflict=false;
+   for(let i=0;i<timed.length;i++)for(let j=i+1;j<timed.length;j++)if(overlaps(windowFor(timed[i],state.turn),windowFor(timed[j],state.turn),state.buffer))hasConflict=true;
+   return {key,configured:true,state:hasConflict?'conflict':on.length?'occupied':'available',
+     current:on.map(f=>f.flight||'Unnumbered'),
+     description:(hasConflict?'Warning: the saved schedule includes overlapping assignments for this position.\\n':'')+
+       (on.length?'On stand at selected time: '+on.map(f=>(f.flight||'Unnumbered')+' ('+(f.ac||'unknown type')+')').join(', '):'No flight assigned to this position at the selected time.')+
+       (assigned.length?'\\nDay assignments: '+assigned.map(f=>(f.flight||'Unnumbered')+' '+(f.eta||'—')+'–'+(f.etd||'—')).join('; '):'\\nNo flights assigned for this day.')};
+ }
+ function drawMap(state,t){
+   const container=$$('mapPins');container.replaceChildren();
+   const results=MAP_POSITIONS.map(([key,x,y])=>({...mapStatus(key,state,t),x,y}));
+   for(const item of results){
+     const pin=el('button','map-pin '+item.state);
+     pin.type='button';pin.style.left=item.x+'%';pin.style.top=item.y+'%';
+     pin.setAttribute('aria-label',item.key+': '+(item.current.join(', ')||item.state));
+     pin.setAttribute('aria-pressed',String(selectedMapPosition===item.key));
+     pin.title=item.key+' — '+item.current.join(', ');
+     pin.textContent=item.state==='conflict'?'!':item.state==='occupied'?(item.current[0]||'●'):item.state==='reserved'?'R':item.state==='inactive'?'×':'✓';
+     pin.addEventListener('click',()=>{selectedMapPosition=item.key;drawMap(state,t)});
+     container.append(pin);
+   }
+   const chosen=results.find(v=>v.key===selectedMapPosition)||results[0];
+   $$('mapSelection').textContent=chosen.key+' — '+chosen.state.toUpperCase()+'\\n'+chosen.description;
+   $$('mapSummary').textContent=results.filter(x=>x.state==='occupied').length+' occupied · '+results.filter(x=>x.state==='available').length+' available · '+results.filter(x=>x.state==='conflict').length+' conflicts · '+results.filter(x=>x.state==='reserved').length+' GA reservations';
+   const unmapped=state.stands.filter(key=>!MAP_POSITIONS.some(p=>p[0]===key));
+   $$('unmappedStands').hidden=!unmapped.length;
+   $$('unmappedStands').textContent=unmapped.length?'Configured positions without a location on this schematic: '+unmapped.join(', ')+'. These remain in the assignment system.':'';
+ }
+ function read(){const s=safeRead('jia-stands-v1');const hasSave=Boolean(s&&Array.isArray(s.flights));const flights=hasSave?s.flights:fallback;const date=hasSave&&/^\d{4}-\d{2}-\d{2}$/.test(s.date||'')?s.date:[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,'0'),String(new Date().getDate()).padStart(2,'0')].join('-');const stands=hasSave&&Array.isArray(s.rules?.stands)?s.rules.stands.map(x=>x[0]):['Stand 1','Stand 2','Stand 3','Stand 4','Stand 5','Stand 6','Stand 7L','Stand 7','Stand 8','Stand 9','Stand 10','Cargo'];const gaCount=hasSave&&Array.isArray(s.ga)?s.ga.length:4;return{flights,date,stands,gaCount,ga:hasSave&&Array.isArray(s.ga)?s.ga:[],turn:hasSave?Number(s.rules?.turn??45):45,buffer:hasSave?Number(s.rules?.buffer??10):10,hasSave}}
+ function paint(){const state=read(), t=minutes($$('viewTime').value)||0, flights=state.flights;
+  $$('dataLabel').textContent=state.hasSave?'Showing saved assignments from this browser':'Illustrative sample activity — open Assignments to load your own sample';
+  $$('flightCount').textContent=flights.length;
+  $$('assignedCount').textContent=flights.filter(f=>Boolean(f.stand)).length;
+  $$('assignedHint').textContent=state.hasSave?'From your saved assignment rows':'Pre-filled illustration';
+  $$('flightHint').textContent=state.hasSave?'From saved working day':'Illustrative daily schedule';
+  $$('gaCount').textContent=state.gaCount;
+  $$('planDate').textContent=fmtDate(state.date);
+  $$('inspectionCount').textContent=(['jia-insp-state-v1','jia-term-state-v1'].filter(k=>safeRead(k)).length)+'/2';
+  const body=$$('flightRows');body.replaceChildren();
+  if(!flights.length){const tr=el('tr');const td=el('td','muted','No flights saved for this demonstration day. Open Daily Assignments to load sample flights.');td.colSpan=5;tr.append(td);body.append(tr)}
+  else for(const f of flights.slice().sort((a,b)=>(minutes(a.eta)??minutes(a.etd)??9999)-(minutes(b.eta)??minutes(b.etd)??9999)).slice(0,10)){
+    const tr=el('tr'), c1=el('td'), main=el('div','flight',f.flight||'Unnumbered'), sub=el('div','sub',f.ac||'Aircraft unspecified');c1.append(main,sub);tr.append(c1,el('td','',f.eta||'—'),el('td','',f.etd||'—'),el('td','',f.stand||'Unassigned'));
+    const c5=el('td'), st=status(f,t,state.turn);c5.append(el('span','pill '+(st==='On stand'?'occupied':st==='Expected'?'free':''),st));tr.append(c5);body.append(tr);
+  }
+  const grid=$$('standGrid');grid.replaceChildren();
+  for(const stand of state.stands){const on=flights.filter(f=>f.stand===stand&&active(f,t,state.turn));const b=el('div','bay'+(on.length?' busy':''));b.append(el('b','',stand),el('span','',on.length?on.map(f=>f.flight).join(', '):'Available in preview'));grid.append(b)}
+  drawMap(state,t);
+ }
+ $$('viewTime').addEventListener('input',paint);$$('resetTime').addEventListener('click',()=>{$$('viewTime').value='12:30';paint()});window.addEventListener('pageshow',paint);window.addEventListener('storage',paint);document.addEventListener('visibilitychange',()=>{if(!document.hidden)paint()});paint();
+})();
+</script>
+</body>
+</html>
