@@ -17,20 +17,20 @@ var PERMISSIONS=[
  ['reports:view','View reports and audit'],['admin:manage','Manage account types and departments']
 ];
 var ALL=PERMISSIONS.map(function(p){return p[0]});
-var role=function(name,perms){return {name:name,perms:perms}};
+var defineRole=function(name,perms){return {name:name,perms:perms}};
 var ROLES=[
- role('System Administrator',ALL),
- role('Airport Operations',['dashboard:view','flights:view','flights:approve','flights:assign','flights:update','ga:view','ga:edit','issues:view','issues:report','issues:assign','issues:resolve','inspections:view','inspections:record','permits:view','permits:request','permits:approve','permits:close','notams:view','notams:request','notams:review','reports:view']),
- role('Airport Manager',['dashboard:view','flights:view','ga:view','issues:view','inspections:view','permits:view','notams:view','reports:view']),
- role('ATC',['dashboard:view','flights:view','ga:view','inspections:view','notams:view','notams:request','notams:ack','issues:view','issues:report']),
- role('AIS',['dashboard:view','flights:view','notams:view','notams:file','reports:view']),
- role('Airline',['dashboard:view','flights:view','flights:create','flights:update','private:view','private:edit','ga:view','issues:view','issues:report','permits:view','permits:request','notams:view','notams:request']),
- role('FBO',['dashboard:view','flights:view','ga:view','ga:edit','issues:view','issues:report','permits:view','permits:request']),
- role('Ground Handler',['dashboard:view','flights:view','ga:view','issues:view','issues:report','permits:view','permits:request']),
- role('Maintenance',['dashboard:view','flights:view','issues:view','issues:report','issues:resolve','inspections:view','inspections:record','permits:view','permits:request','permits:close','notams:view','notams:request']),
- role('Safety',['dashboard:view','flights:view','issues:view','issues:report','issues:resolve','inspections:view','inspections:record','permits:view','notams:view','notams:request','reports:view']),
- role('Communications',['dashboard:view','flights:view','notams:view','issues:view']),
- role('Airport Fire Service',['dashboard:view','flights:view','issues:view','issues:report','inspections:view','permits:view','notams:view'])
+ defineRole('System Administrator',ALL),
+ defineRole('Airport Operations',['dashboard:view','flights:view','flights:approve','flights:assign','flights:update','ga:view','ga:edit','issues:view','issues:report','issues:assign','issues:resolve','inspections:view','inspections:record','permits:view','permits:request','permits:approve','permits:close','notams:view','notams:request','notams:review','reports:view']),
+ defineRole('Airport Manager',['dashboard:view','flights:view','ga:view','issues:view','inspections:view','permits:view','notams:view','reports:view']),
+ defineRole('ATC',['dashboard:view','flights:view','ga:view','inspections:view','notams:view','notams:request','notams:ack','issues:view','issues:report']),
+ defineRole('AIS',['dashboard:view','flights:view','notams:view','notams:file','reports:view']),
+ defineRole('Airline',['dashboard:view','flights:view','flights:create','flights:update','private:view','private:edit','ga:view','issues:view','issues:report','permits:view','permits:request','notams:view','notams:request']),
+ defineRole('FBO',['dashboard:view','flights:view','ga:view','ga:edit','issues:view','issues:report','permits:view','permits:request']),
+ defineRole('Ground Handler',['dashboard:view','flights:view','ga:view','issues:view','issues:report','permits:view','permits:request']),
+ defineRole('Maintenance',['dashboard:view','flights:view','issues:view','issues:report','issues:resolve','inspections:view','inspections:record','permits:view','permits:request','permits:close','notams:view','notams:request']),
+ defineRole('Safety',['dashboard:view','flights:view','issues:view','issues:report','issues:resolve','inspections:view','inspections:record','permits:view','notams:view','notams:request','reports:view']),
+ defineRole('Communications',['dashboard:view','flights:view','notams:view','issues:view']),
+ defineRole('Airport Fire Service',['dashboard:view','flights:view','issues:view','issues:report','inspections:view','permits:view','notams:view'])
 ];
 var PAGES=[
  ['dashboard','▦','Operations Dashboard','dashboard:view'],
