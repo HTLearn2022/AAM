@@ -70,6 +70,13 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 @media(max-width:970px){.info-pair{grid-template-columns:1fr}}
 @media print{.info-card,.notam-item{break-inside:avoid}}
 
+
+.aviation-message{margin-top:13px;padding:11px 12px;background:#f3f7fc;border:1px solid #dce6f2;border-radius:9px;color:#213955}
+.aviation-message-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.aviation-message-head b{font-size:12px;letter-spacing:.5px}
+.aviation-message-head span{font-size:10px;color:#63768e}
+.aviation-message code{display:block;white-space:normal;overflow-wrap:anywhere;font:11px/1.7 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:#233d5e}
+
 </style>
 </head>
 <body>
@@ -133,12 +140,22 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
       <div class="info-card-body">
         <div class="weather-main"><div class="weather-symbol" aria-hidden="true">⛅</div><div class="weather-temp">29°C<span>Partly cloudy · JSR International Airport</span></div></div>
         <div class="weather-facts">
-          <div class="weather-fact"><b>070° / 10 kt</b><span>Wind direction / speed</span></div>
-          <div class="weather-fact"><b>10 km+</b><span>Visibility</span></div>
-          <div class="weather-fact"><b>FEW 2,000 ft</b><span>Illustrative cloud cover</span></div>
-          <div class="weather-fact"><b>QNH 1014 hPa</b><span>Altimeter setting</span></div>
+          <div class="weather-fact"><b>070° at 10 kt</b><span>Wind</span></div>
+          <div class="weather-fact"><b>10 km or more</b><span>Visibility</span></div>
+          <div class="weather-fact"><b>FEW 2,000 ft</b><span>Cloud</span></div>
+          <div class="weather-fact"><b>29°C / 24°C</b><span>Temperature / dew point</span></div>
+          <div class="weather-fact"><b>1014 hPa</b><span>QNH</span></div>
+          <div class="weather-fact"><b>No significant phenomena</b><span>Present weather</span></div>
         </div>
-        <div class="info-disclaimer">Simulated JIA weather for software demonstration. Not an observed METAR/TAF or information suitable for flight operations.</div>
+        <div class="aviation-message" aria-label="Fictional METAR weather report">
+          <div class="aviation-message-head"><b>METAR</b><span>Fictional observation · 20 Nov 2026, 14:00 UTC</span></div>
+          <code>METAR ZZZZ 201400Z 07010KT 9999 FEW020 29/24 Q1014=</code>
+        </div>
+        <div class="aviation-message" aria-label="Fictional TAF forecast">
+          <div class="aviation-message-head"><b>TAF</b><span>Fictional forecast · 20–21 Nov 2026 (UTC)</span></div>
+          <code>TAF ZZZZ 201100Z 2012/2112 08012KT 9999 SCT025 TEMPO 2018/2022 4000 SHRA BKN015=</code>
+        </div>
+        <div class="info-disclaimer">All conditions, METAR and TAF are invented for the JIA demonstration. ZZZZ is a placeholder location indicator, not a live airport feed. Do not use these examples for aviation decisions.</div>
       </div>
     </article>
     <article class="info-card" aria-label="Sample NOTAM-style notices">
