@@ -1,38 +1,73 @@
-# Airport Airside Manager (AAM) – JIA Demonstration
+# Airport Airside Manager (AAM)
 
-A static, fictional airport demonstration by JSR Communications. No real operational records are included.
+**An integrated airport operations management platform by JSR Communications.**
 
-## Contents
-- `index.html`: Operations Hub dashboard, including a time-based interactive apron map linked to assignment records.
-- `assets/jia-demo-apron.svg`: original fictional vector airport diagram, featuring configured stand and GA positions.
-- `assignments.html`: uploaded stand/counter/GA demonstration, with a link back to the hub.
-- `airfield-inspection.html`: uploaded airfield inspection demonstration, with a link back.
-- `terminal-inspection.html`: uploaded terminal inspection demonstration, with a link back.
+Airport Airside Manager (AAM) is being developed to help small and medium-sized airports coordinate daily airside operations from one connected system. Rather than relying on disconnected spreadsheets, group messages and paper records, AAM is designed to bring flight schedules, airport resource assignments, inspections, issue management, permits, NOTAM requests and operational reporting into a role-based management hub.
 
-## To preview
-Open `index.html` in a browser, or run a local static server in this directory:
+AAM is initially focused on Caribbean airports, with each airport's configuration intended to reflect its own facilities, procedures, approved workflows and regulatory requirements.
 
-```sh
-python -m http.server 8000
-```
+**Project status:** AAM is in development. This repository currently hosts an interactive, **fictional JSR International Airport (JIA) demonstration** of selected workflows; it is not a complete production application or an airport-certified operational system.
 
-Then visit `http://localhost:8000/`.
+## AAM product scope
 
-## Deploy to GitHub Pages (after approval)
-1. Create an appropriately named repo e.g. `aam-demo` (public if on GitHub Free).
-2. Upload all files from this directory, preserving their names.
-3. In repository Settings → Pages, deploy from `main` branch, root `/`.
-4. The expected URL format is `https://<username>.github.io/aam-demo/`.
+| Area | Intended capability |
+|---|---|
+| Flight schedules and assignments | Airline flight requests, Operations acceptance, parking stands and alternates, check-in counters, boarding gates, baggage belts and clashes |
+| General aviation | Multi-day parking register, position allocation and overlapping-stay checks |
+| Inspections | Configurable airfield, runway, apron and terminal checklists; remarks, follow-up actions, reports and appropriate runway-condition information |
+| Issues and defects | Report, assign, track, remind, escalate and sign off defects; link failed inspection items to tracked issues |
+| Permits | Requests, approvals, conditions and close-out for hot works, airside works and relevant driving/airside permissions |
+| NOTAM requests | Prepare, review and route requests to authorised personnel/AIS; the platform does not itself issue an official NOTAM |
+| Operations dashboards | Flights, resource use, inspection follow-ups, defects, active permits and other operational information |
+| Airline private workspace | Each airline can maintain, annotate, add private rows to and print its own internal schedules without sharing private changes with Airport Operations |
+| Core platform | Airport-specific configuration, role-based access for Operations, airlines, handlers, Maintenance, ATC, managers and other approved teams, plus audit trails and separation of customer data |
 
-## Important limitations
-- The default assignment rules now include stands 1–10, stand 7L, Cargo and GA positions G1–G9 to match the map. Existing browser-saved rules are never overwritten; unconfigured map positions are shown as unavailable.
-- The diagram is a fictional schematic, not an operationally accurate or georeferenced map. Its coloured occupancy pins are computed using the same ETA/ETD and turnaround/buffer rules as the assignment application. GA stays appear as recorded or reserved, because their register does not specify precise on-stand times.
-- The dashboard reads fictional sample flights by default, and reads saved assignments from the same origin's browser localStorage (key `jia-stands-v1`) if present. It doesn't write sample data to the assignment module.
-- The two inspection modules each maintain their own local browser drafts. The dashboard displays only whether browser drafts exist, not inspection outcomes.
-- No real user authentication, shared data, server database, live flight data, submission or official NOTAM function is provided here.
-- Forms and buttons inside the original modules retain their existing behaviour. A few buttons can download PDFs or open the visitor's email client; none should be interpreted as an official airport workflow.
-- Do not put any airport proprietary data, passwords or API keys in the static site. GitHub Pages is public-facing.
-- GitHub Pages should be used only as a fictional demonstration, not for commercial SaaS operations.
+These are **product requirements and development objectives**, not claims that every capability has already been implemented or verified.
 
-## Source preservation
-Each supplied HTML module has only a small home-link navigation row and associated CSS inserted. Its original application scripts and logic are unchanged.
+## JIA demonstration — currently available
+
+The demonstration uses invented flights, aircraft, airport geometry and operational records.
+
+| Component | Current status |
+|---|---|
+| Operations Hub, flight movement board and assignment-linked fictional apron map | Interactive browser demonstration |
+| Daily stand, counter and gate assignment controls and GA parking | Interactive browser demonstration |
+| Airfield inspection and runway-condition entry | Standalone browser-based inspection demonstration |
+| Terminal inspection | Standalone browser-based inspection demonstration |
+| Shared role-based sign-in, multi-airport database, issue escalation, permits, NOTAM routing and airline-private server workspace | **Not implemented in this static demonstration** |
+
+The interactive apron schematic covers Stands 1–10, Stand 7L, general aviation positions G1–G9 and Cargo. Saved assignment data informs its indicators where available. The map is **invented and not to scale**.
+
+### Demonstration files
+
+- `index.html` — AAM Operations Hub landing page, interactive apron map and flight movement board.
+- `assignments.html` — Flight schedule, resource allocation, GA parking and rules demonstration.
+- `airfield-inspection.html` — Airfield inspection demonstration and reporting.
+- `terminal-inspection.html` — Terminal inspection demonstration and reporting.
+- `assets/jia-demo-apron.svg` — Original fictional schematic for the interactive map.
+
+## View the demonstration
+
+GitHub Pages can publish the fictional website from the `main` branch, `/ (root)`, in **Settings → Pages**. Once enabled, the anticipated URL is:
+
+https://HTLearn2022.github.io/AAM/
+
+The source can also be viewed locally by opening `index.html` or serving the repository as a static directory.
+
+## Development and operational safeguards
+
+- This is a **public demonstration repository**, not the intended production deployment or a substitute for approved airport procedures.
+- The demonstration stores some data locally within the visitor's browser; records are **not shared between users or devices**.
+- The flight and inspection modules currently operate as separate browser applications. There is no production login, shared database or live airport-data service.
+- Some inspection controls can generate or prepare downloadable reports or emails. They do not replace an airport's formal approval, notification, recordkeeping or NOTAM-issuance processes.
+- Safety-relevant functions will require airport-specific validation, access controls, auditability and applicable procedural/regulatory review before live operational use.
+- Do not enter live airport schedules, confidential records, passwords, API tokens or other restricted operational information into the public demonstration.
+- Proprietary source-code rights, third-party data licensing and commercial use are separate considerations; publication of this demonstration is not a claim that the entire AAM SaaS product is open source.
+
+## Developer
+
+**JSR Communications** — Saint Vincent and the Grenadines  
+Website: https://www.jsrsvg.com  
+Product: **Airport Airside Manager (AAM)**
+
+The JIA demonstration illustrates the direction of the product; AAM itself is the broader airport operations management platform.
