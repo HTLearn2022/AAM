@@ -1,5 +1,7 @@
 (function(){
 'use strict';
+var IS_EMBEDDED=new URLSearchParams(location.search).get('embed')==='1';
+if(IS_EMBEDDED)document.body.classList.add('embed');
 var KEY='aam-jia-connected-v1',SESSION='aam-jia-account-v1',NAV='aam-portal-sidebar-v1';
 var $=function(id){return document.getElementById(id)};
 var safe=function(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
@@ -379,4 +381,17 @@ var storedAccount;
 try{storedAccount=sessionStorage.getItem(SESSION)}catch(e){storedAccount=null}
 if(storedAccount){user=data.users.find(function(u){return u.id===storedAccount&&u.active})||null}
 if(user){$('loginOverlay').hidden=true;selectPage(location.hash.slice(1)||'dashboard')}else showLogin();
+
+if(IS_EMBEDDED){
+ var notifyParent=function(){
+  try{window.parent.postMessage({type:'aam-embed-height',height:Math.ceil(document.querySelector('main.content').scrollHeight+70)},location.origin)}catch(e){}
+ };
+ if(typeof ResizeObserver==='function'){
+  var sizeObserver=new ResizeObserver(notifyParent);sizeObserver.observe(document.querySelector('main.content'));
+ }
+ window.addEventListener('load',notifyParent);
+ window.addEventListener('hashchange',notifyParent);
+ Promise.resolve().then(notifyParent);
+}
+
 })();
