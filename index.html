@@ -30,10 +30,10 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 .map-pin.inactive{background:#d9dfe7;color:#516071;border-color:#fff;opacity:.83}
 .map-pin:focus-visible{outline:3px solid #245da9;outline-offset:3px}
 .map-pin[aria-pressed="true"]{box-shadow:0 0 0 3px #153963,0 3px 12px #0a254966}
-.map-info{border-left:1px solid var(--line);padding:18px;background:#fbfcfe}
+.map-info{border-left:1px solid var(--line);padding:18px;background:#fbfcfe;color:#182640}
 .map-info h4{margin:0 0 8px;color:#152f53;font-size:15px}
 .map-info p{margin:0 0 12px;color:#586c84;font-size:12px}
-.map-info .detail{background:#fff;border:1px solid #dce5ee;border-radius:10px;padding:12px;margin:12px 0;font-size:12px;white-space:pre-line;overflow-wrap:anywhere}
+.map-info .detail{background:#fff;border:1px solid #dce5ee;border-radius:10px;padding:12px;margin:12px 0;font-size:13px;line-height:1.65;white-space:pre-line;overflow-wrap:anywhere;color:#1b3658;min-height:112px}
 .map-legend{display:grid;gap:8px;margin:16px 0;font-size:12px}
 .map-legend span{display:flex;align-items:center;gap:9px}
 .map-legend i{display:inline-block;width:14px;height:14px;border-radius:5px;border:2px solid #fff;box-shadow:0 0 0 1px #bdcad7}
@@ -43,6 +43,32 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}.map-info{border-left:0;border-top:1px solid var(--line)}}
 @media(max-width:520px){.map-viewport{padding:7px}.map-pin{min-width:15px;min-height:16px;font-size:7px;padding:2px 3px;border-width:1px;border-radius:4px;max-width:45px}}
 @media print{.map-pin{box-shadow:none}.map-layout{grid-template-columns:1.5fr 1fr}.map-info{break-inside:avoid}}
+
+
+/* Airport information: fictional, illustrative conditions and NOTAM-style notices. */
+.info-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.18fr);gap:14px}
+.info-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.info-card-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.info-card-head h3{font-size:15px;margin:0}
+.info-card-head small{color:#657990;font-size:11px}
+.info-card-body{padding:18px}
+.weather-main{display:flex;align-items:center;gap:17px;margin-bottom:15px}
+.weather-symbol{background:#eef5ff;border-radius:17px;width:70px;height:70px;display:grid;place-items:center;font-size:33px}
+.weather-temp{font-size:31px;font-weight:800;line-height:1.1;color:#15355e}
+.weather-temp span{font-size:13px;font-weight:650;color:#566e87;display:block;margin-top:6px}
+.weather-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.weather-fact{border-radius:9px;background:#f3f7fc;padding:10px 11px}
+.weather-fact b{display:block;font-size:13px;color:#203c5a}
+.weather-fact span{font-size:11px;color:#61748c}
+.info-disclaimer{margin-top:14px;padding:10px 12px;background:#fff8e6;border-radius:9px;border:1px solid #f1dfa8;font-size:11px;color:#795817}
+.notam-items{display:grid;gap:10px}
+.notam-item{border:1px solid #dce5ed;border-left:4px solid #d49b20;background:#fbfdff;border-radius:9px;padding:11px 13px}
+.notam-item strong{font-size:12px;color:#163a65}
+.notam-item p{font-size:12px;color:#334c64;margin:5px 0}
+.notam-item small{font-size:10px;color:#677a90}
+.notam-status{display:inline-block;margin-left:10px;padding:3px 8px;border-radius:6px;background:#fff0cf;color:#7d540c;font-size:10px;font-weight:750}
+@media(max-width:970px){.info-pair{grid-template-columns:1fr}}
+@media print{.info-card,.notam-item{break-inside:avoid}}
 
 </style>
 </head>
@@ -98,6 +124,33 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
   <section class="dash-grid">
     <div class="panel"><div class="panel-h"><h3>Flight movement board</h3><small id="planDate">Sample operating day</small></div><div class="table-wrap"><table class="table"><thead><tr><th>Flight / Type</th><th>ETA</th><th>ETD</th><th>Stand</th><th>Movement</th></tr></thead><tbody id="flightRows"><tr><td colspan="5">Loading preview data…</td></tr></tbody></table></div><div class="panel-bottom"><a href="assignments.html">Open the editable schedule and assignment controls</a> · <span class="muted">All flights fictional</span></div></div>
     <div class="panel"><div class="panel-h"><h3>Apron occupancy preview</h3><small>Calculated from sample movement times</small></div><div class="apron" id="standGrid" aria-live="polite"></div><div class="note">Indicative stand use from ETA/ETD windows. Not a live aircraft position feed or an operational clearance.</div></div>
+  </section>
+
+  <div class="section-head" id="airport-info"><h3>Weather &amp; NOTAMs</h3><small>JIA fictional airport information · sample data only</small></div>
+  <section class="info-pair" aria-label="Illustrative airport weather and NOTAM information">
+    <article class="info-card" aria-label="JIA sample weather">
+      <div class="info-card-head"><h3>Airport weather</h3><small>Illustrative observation · not live</small></div>
+      <div class="info-card-body">
+        <div class="weather-main"><div class="weather-symbol" aria-hidden="true">⛅</div><div class="weather-temp">29°C<span>Partly cloudy · JSR International Airport</span></div></div>
+        <div class="weather-facts">
+          <div class="weather-fact"><b>070° / 10 kt</b><span>Wind direction / speed</span></div>
+          <div class="weather-fact"><b>10 km+</b><span>Visibility</span></div>
+          <div class="weather-fact"><b>FEW 2,000 ft</b><span>Illustrative cloud cover</span></div>
+          <div class="weather-fact"><b>QNH 1014 hPa</b><span>Altimeter setting</span></div>
+        </div>
+        <div class="info-disclaimer">Simulated JIA weather for software demonstration. Not an observed METAR/TAF or information suitable for flight operations.</div>
+      </div>
+    </article>
+    <article class="info-card" aria-label="Sample NOTAM-style notices">
+      <div class="info-card-head"><h3>NOTAM-style notices</h3><small>2 sample notices · not issued by AIS</small></div>
+      <div class="info-card-body">
+        <div class="notam-items">
+          <div class="notam-item"><strong>SIM-JIA-001</strong><span class="notam-status">In force · sample</span><p>Taxiway C temporarily unavailable for planned surface inspection within the fictional demonstration.</p><small>Fictional operational restriction · illustrative only</small></div>
+          <div class="notam-item"><strong>SIM-JIA-002</strong><span class="notam-status">In force · sample</span><p>Apron Stand 9 designated for restricted use pending a fictional lighting maintenance check.</p><small>Fictional apron notice · illustrative only</small></div>
+        </div>
+        <div class="info-disclaimer">These are invented training notices, not published NOTAMs. Official NOTAM status must come from authorised AIS sources when a production provider is connected.</div>
+      </div>
+    </article>
   </section>
 
   <div class="section-head" id="modules"><h3>Explore the current JIA demonstration</h3><small>Working examples of selected AAM modules · fictional data</small></div>
