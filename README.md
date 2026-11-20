@@ -34,7 +34,8 @@ The demonstration uses invented flights, aircraft, airport geometry and operatio
 | Daily stand, counter and gate assignment controls and GA parking | Interactive browser demonstration |
 | Airfield inspection and runway-condition entry | Standalone browser-based inspection demonstration |
 | Terminal inspection | Standalone browser-based inspection demonstration |
-| Shared role-based sign-in, multi-airport database, issue escalation, permits, NOTAM routing and airline-private server workspace | **Not implemented in this static demonstration** |
+| Issues, permit requests and internal NOTAM request preparation | Browser-only workflow demonstration with fictional records and a simulated role selector; **no real authorisations, messaging or official NOTAMs** |
+| Shared role-based sign-in, multi-airport database, automatic issue reminders, inspection-to-issue integration, official permit routing, AIS submission and airline-private server workspace | **Not implemented in this static demonstration** |
 
 The interactive apron schematic covers Stands 1–10, Stand 7L, general aviation positions G1–G9 and Cargo. Saved assignment data informs its indicators where available. The map is **invented and not to scale**.
 
@@ -44,6 +45,7 @@ The interactive apron schematic covers Stands 1–10, Stand 7L, general aviation
 - `assignments.html` — Flight schedule, resource allocation, GA parking and rules demonstration.
 - `airfield-inspection.html` — Airfield inspection demonstration and reporting.
 - `terminal-inspection.html` — Terminal inspection demonstration and reporting.
+- `workflows.html` — Fictional issue reporting, permit lifecycle and internal NOTAM request preview using local browser storage.
 - `assets/jia-demo-apron.svg` — Original fictional schematic for the interactive map.
 
 ## View the demonstration
@@ -58,6 +60,8 @@ The source can also be viewed locally by opening `index.html` or serving the rep
 
 - This is a **public demonstration repository**, not the intended production deployment or a substitute for approved airport procedures.
 - The demonstration stores some data locally within the visitor's browser; records are **not shared between users or devices**.
+- Weather conditions, METAR/TAF and NOTAM-style airport notices are fabricated fixed examples, not current aviation data.
+- The role switcher in the workflow preview only simulates different permissions. It is not a login, cannot enforce access control and must not be used with real airport information.
 - The flight and inspection modules currently operate as separate browser applications. There is no production login, shared database or live airport-data service.
 - Some inspection controls can generate or prepare downloadable reports or emails. They do not replace an airport's formal approval, notification, recordkeeping or NOTAM-issuance processes.
 - Safety-relevant functions will require airport-specific validation, access controls, auditability and applicable procedural/regulatory review before live operational use.
