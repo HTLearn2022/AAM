@@ -11,6 +11,7 @@
 <body>
 <div class="shell">
 <aside class="sidebar" aria-label="AAM navigation">
+<button id="collapseSidebar" class="collapse-control" type="button" aria-expanded="true" aria-label="Collapse sidebar" title="Collapse sidebar">☰</button>
 <div class="brand"><b>Airport Airside Manager</b><small>AAM · JSR COMMUNICATIONS</small></div>
 <div class="nav-title">JIA operations simulator</div>
 <nav id="navLinks" aria-label="Department modules"></nav>
@@ -54,6 +55,7 @@
 <div class="panel"><h3>Add fictional GA stay</h3><form class="form" id="gaForm"><label>Aircraft registration<input name="registration" required maxlength="16"></label><label>Aircraft type<input name="aircraft" required maxlength="24" placeholder="C208"></label><label>GA position<select name="spot" id="gaSpotSelect"></select></label><label>Operator<input name="operator" required maxlength="80"></label><label>Arrival date<input type="date" name="start" required></label><label>Departure date<input type="date" name="end" required></label><label>Status<select name="status"><option>Reserved</option><option>On stand</option><option>Departed</option></select></label><div class="full"><button class="btn primary">Save GA stay</button></div></form></div></div>
 </section>
 <section class="section" data-page="issues">
+<div class="tab-strip" aria-label="Issues and permits tabs"><button type="button" class="tab-button active" data-jump="issues">Issues &amp; Defects</button><button type="button" class="tab-button" data-jump="permits">Permits &amp; Approvals</button></div>
 <div class="two"><div class="panel"><h3>Issues &amp; defects register</h3><p class="hint">One issue, one accountable owner, due date and recorded resolution/sign-off. Overdue entries remain open until formally closed.</p><div class="cards" id="issueRows"></div></div>
 <div class="panel"><h3>Report a defect</h3><form id="issueForm" class="form">
 <label>Location<input name="location" required maxlength="100" placeholder="Stand 4"></label><label>Category<select name="category"><option>Lighting</option><option>Surface</option><option>FOD</option><option>Fire / safety</option><option>Equipment</option><option>Terminal</option><option>Other</option></select></label>
@@ -69,6 +71,7 @@
 <p class="hint" style="margin-top:15px">For full day/night checklists and PDF reports, use the existing <a href="airfield-inspection.html">Airfield Inspection</a> or <a href="terminal-inspection.html">Terminal Inspection</a> tools. Those older standalone forms do not yet automatically create issues in this simulator.</p></div></div>
 </section>
 <section class="section" data-page="permits">
+<div class="tab-strip" aria-label="Issues and permits tabs"><button type="button" class="tab-button" data-jump="issues">Issues &amp; Defects</button><button type="button" class="tab-button active" data-jump="permits">Permits &amp; Approvals</button></div>
 <div class="two"><div class="panel"><h3>Airside permits</h3><p class="hint">Request → approval / rejection → activation → close-out. Decisions are simulated and retained in the local audit history.</p><div id="permitRows" class="cards"></div></div>
 <div class="panel"><h3>New permit application</h3><form class="form" id="permitForm">
 <label>Permit type<select name="type"><option>Hot works</option><option>Airside works</option><option>AVOP / driving</option><option>Temporary access</option></select></label><label>Location<input required name="location" maxlength="100"></label>
