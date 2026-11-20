@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Airport Airside Manager (AAM) integrated fictional JSR International Airport role-based operations simulator by JSR Communications.">
+<meta name="theme-color" content="#102b4f">
+<title>AAM | JIA Integrated Operations Simulation</title>
+<link rel="stylesheet" href="assets/portal.css">
+<script src="assets/portal.js" defer></script>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar" aria-label="AAM navigation">
+<div class="brand"><b>Airport Airside Manager</b><small>AAM · JSR COMMUNICATIONS</small></div>
+<div class="nav-title">JIA operations simulator</div>
+<nav id="navLinks" aria-label="Department modules"></nav>
+<div class="sidebar-note"><b>Fictional environment</b><p>JIA and all records are invented. Roles, data, actions and approvals are simulated within this browser. This is not an airport-authorised operational system.</p><a href="index.html" style="color:#e2f4ff">Public product overview</a></div>
+</aside>
+<main class="content">
+<div class="top"><div><h1 id="pageTitle">Operations Dashboard</h1><small>JSR International Airport · Runway 06/24 · Demonstration</small></div>
+<div class="account"><span id="accountLabel">No active fictional account</span><button type="button" id="switchAccount">Switch account</button></div></div>
+<div class="demo-label">Fictional operational simulator. Select a departmental account to explore permissions and shared records. <b>Switching roles is not authentication.</b> All changes stay in local browser storage; no external notifications, operational clearances or official NOTAMs are issued.</div>
+<section class="section active" data-page="dashboard">
+<div class="hero"><h2>JIA Operations Hub</h2><p>One shared demonstration workspace for flight requests, stand assignments, inspection findings, defects, permit approvals and NOTAM requests. Switch between fictional department accounts to see the differences.</p></div>
+<div class="panel"><div class="panel-head"><h3>Operating day</h3><label class="field">Date <input id="operatingDate" type="date"></label></div><p class="hint">Use the same fictional working day across flights, GA stays, inspections and the apron display.</p></div>
+<div class="metrics" id="dashboardMetrics"></div>
+<div class="two">
+<div class="panel"><h3>Apron occupancy · assignment-linked</h3><div class="actions"><label class="field">View time <input id="viewTime" type="time" value="12:30"></label><button class="btn" data-action="reset-time">12:30 sample</button></div>
+<div class="map-wrap"><div class="map-graphic"><img src="assets/jia-demo-apron.svg" alt="Original fictional JIA apron with contact stands, remote parking, GA and cargo positions"><div id="mapPins"></div></div>
+<div><h4>Selected position</h4><div class="map-data" id="mapDetail">Choose a stand.</div><p class="hint">Green = available; amber = occupied; red = conflicting. Invented schematic, not to scale.</p></div></div>
+</div>
+<div class="panel"><h3>Fictional airport weather</h3><div class="wxgrid"><div><b>070° at 10 kt</b><small>Wind</small></div><div><b>10 km+</b><small>Visibility</small></div><div><b>FEW 2,000 ft</b><small>Cloud</small></div><div><b>29°C / 24°C</b><small>Temp / dew point</small></div><div><b>1014 hPa</b><small>QNH</small></div><div><b>No significant weather</b><small>Present weather</small></div></div><h4 style="margin-top:14px">Sample METAR</h4><code class="raw">METAR ZZZZ 201400Z 07010KT 9999 FEW020 29/24 Q1014=</code><h4>Sample TAF</h4><code class="raw">TAF ZZZZ 201100Z 2012/2112 08012KT 9999 SCT025 TEMPO 2018/2022 4000 SHRA BKN015=</code><div class="notice">Illustrative reports only: ZZZZ is a placeholder, not an actual JIA weather station.</div></div>
+</div>
+<div class="two"><div class="panel"><h3>Accepted flight movements</h3><div id="dashboardFlights"></div></div><div class="panel"><h3>Operational handovers</h3><div id="dashboardWork"></div></div></div>
+</section>
+<section class="section" data-page="flights">
+<div class="panel"><div class="panel-head"><h3>Flight requests &amp; official working schedule</h3><span class="tag">Airline requests require Operations acceptance</span></div><p class="hint">Airlines see only their own flights. Pending requests do not appear on the accepted movement board. Airlines may update ETA and ETD after acceptance; only Operations can allocate stands or alter official schedule status.</p><div class="table-wrap"><table><thead><tr><th>Flight / airline</th><th>Category / aircraft</th><th>STA / STD</th><th>ETA / ETD</th><th>Status</th><th>Stand / resources</th><th>Action</th></tr></thead><tbody id="flightRows"></tbody></table></div></div>
+<div class="panel"><h3>Add a flight request</h3><form class="form" id="flightForm">
+<label>Flight number / callsign<input required name="number" maxlength="16" placeholder="IA215"></label><label>Aircraft type<select name="aircraft"><option>AT76</option><option>DHC6</option><option>E190</option><option>A320</option><option>B738</option><option>C208</option></select></label>
+<label>Arrival / origin code<input name="origin" required maxlength="12" placeholder="ZZZA"></label><label>Next destination<input name="destination" required maxlength="12" placeholder="ZZZB"></label>
+<label>Category<select name="category"><option>International</option><option>Domestic</option><option>GA</option><option>Cargo</option></select></label><label>Scheduled arrival (STA)<input name="sta" type="time" required></label>
+<label>Scheduled departure (STD)<input name="std" type="time" required></label><label>ETA (optional)<input name="eta" type="time"></label>
+<label>ETD (optional)<input name="etd" type="time"></label><div class="full"><button class="btn primary" type="submit">Submit to Airport Operations</button></div>
+</form></div>
+</section>
+<section class="section" data-page="private">
+<div class="panel"><h3>Airline private schedule</h3><p class="hint">This is your airline's private working sheet. Add internal rows, notes and changes and print it without sending them to Airport Operations. Selecting <b>Submit flight to Operations</b> is a separate deliberate action.</p>
+<div class="actions"><button class="btn" id="printPrivate" type="button">Print private schedule</button></div>
+<div class="table-wrap" id="privatePrintArea"><table><thead><tr><th>Internal flight</th><th>Route</th><th>Time</th><th>Private notes</th><th>Action</th></tr></thead><tbody id="privateRows"></tbody></table></div></div>
+<div class="panel"><h3>Add private planning row</h3><form id="privateForm" class="form"><label>Internal flight<input name="flight" required maxlength="18"></label><label>Route<input name="route" maxlength="90" required></label><label>Planning time<input name="time" type="time" required></label><label class="full">Private note<textarea name="note" maxlength="350"></textarea></label><div class="full"><button class="btn primary">Save privately</button></div></form></div>
+</section>
+<section class="section" data-page="ga">
+<div class="two"><div class="panel"><h3>GA &amp; FBO parking register</h3><p class="hint">Multi-day reservations and occupied GA positions. FBOs see their own entries, while Operations can view all. Position conflicts are flagged.</p><div id="gaRows"></div></div>
+<div class="panel"><h3>Add fictional GA stay</h3><form class="form" id="gaForm"><label>Aircraft registration<input name="registration" required maxlength="16"></label><label>Aircraft type<input name="aircraft" required maxlength="24" placeholder="C208"></label><label>GA position<select name="spot" id="gaSpotSelect"></select></label><label>Operator<input name="operator" required maxlength="80"></label><label>Arrival date<input type="date" name="start" required></label><label>Departure date<input type="date" name="end" required></label><label>Status<select name="status"><option>Reserved</option><option>On stand</option><option>Departed</option></select></label><div class="full"><button class="btn primary">Save GA stay</button></div></form></div></div>
+</section>
+<section class="section" data-page="issues">
+<div class="two"><div class="panel"><h3>Issues &amp; defects register</h3><p class="hint">One issue, one accountable owner, due date and recorded resolution/sign-off. Overdue entries remain open until formally closed.</p><div class="cards" id="issueRows"></div></div>
+<div class="panel"><h3>Report a defect</h3><form id="issueForm" class="form">
+<label>Location<input name="location" required maxlength="100" placeholder="Stand 4"></label><label>Category<select name="category"><option>Lighting</option><option>Surface</option><option>FOD</option><option>Fire / safety</option><option>Equipment</option><option>Terminal</option><option>Other</option></select></label>
+<label>Severity<select name="severity"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select></label><label>Responsible department<select name="owner"><option>Maintenance</option><option>Airport Operations</option><option>Safety</option><option>Ground Handling</option><option>Terminal Operations</option></select></label>
+<label>Due date/time<input name="due" type="datetime-local"></label><label class="full">Observation<textarea name="description" required maxlength="900"></textarea></label><div class="full"><button class="btn primary">Create tracked issue</button></div></form></div></div>
+</section>
+<section class="section" data-page="inspections">
+<div class="two"><div class="panel"><h3>Recorded inspection findings</h3><p class="hint">A failed inspection item automatically raises a linked issue in this simulator.</p><div id="inspectionRows"></div></div>
+<div class="panel"><h3>Record a fictional inspection check</h3><form id="inspectionForm" class="form">
+<label>Checklist<select name="type" id="inspectionType"><option>Airfield</option><option>Terminal</option></select></label><label>Item<select name="item" id="inspectionItem"></select></label>
+<label>Result<select name="result"><option>Pass</option><option>Fail</option></select></label><label>Location<input name="location" required maxlength="100"></label>
+<label class="full">Remarks<textarea name="remarks" maxlength="900"></textarea></label><div class="full"><button class="btn primary">Record inspection result</button></div></form>
+<p class="hint" style="margin-top:15px">For full day/night checklists and PDF reports, use the existing <a href="airfield-inspection.html">Airfield Inspection</a> or <a href="terminal-inspection.html">Terminal Inspection</a> tools. Those older standalone forms do not yet automatically create issues in this simulator.</p></div></div>
+</section>
+<section class="section" data-page="permits">
+<div class="two"><div class="panel"><h3>Airside permits</h3><p class="hint">Request → approval / rejection → activation → close-out. Decisions are simulated and retained in the local audit history.</p><div id="permitRows" class="cards"></div></div>
+<div class="panel"><h3>New permit application</h3><form class="form" id="permitForm">
+<label>Permit type<select name="type"><option>Hot works</option><option>Airside works</option><option>AVOP / driving</option><option>Temporary access</option></select></label><label>Location<input required name="location" maxlength="100"></label>
+<label>Responsible team<input required name="team" maxlength="90"></label><label>Proposed end date/time<input name="end" type="datetime-local"></label>
+<label class="full">Scope / safety precautions<textarea required name="scope" maxlength="950"></textarea></label><div class="full"><button class="btn primary">Submit permit request</button></div></form></div></div>
+</section>
+<section class="section" data-page="notams">
+<div class="notice">NOTAM requests and “issued” notices on this page are fictional simulations. This site never communicates with AIS, ATC or an authoritative NOTAM service.</div>
+<div class="two"><div class="panel"><h3>NOTAM requests &amp; sample notices</h3><p class="hint">Internal request → Operations review → AIS filing simulation → ATC acknowledgement. Requests are not official NOTAMs.</p><div class="cards" id="notamRows"></div></div>
+<div class="panel"><h3>New internal NOTAM request</h3><form class="form" id="notamForm">
+<label>Subject<select name="subject"><option>Runway</option><option>Taxiway</option><option>Apron / stands</option><option>Lighting</option><option>Obstacle</option><option>Other</option></select></label>
+<label>Location<input name="location" required maxlength="100" placeholder="RWY 06/24"></label>
+<label>Start time (UTC)<input name="start" type="datetime-local"></label><label>End time (UTC)<input name="end" type="datetime-local"></label>
+<label class="full">Proposed notice text<textarea required name="text" maxlength="1000"></textarea></label><div class="full"><button class="btn primary">Submit internal request</button></div></form></div></div>
+</section>
+<section class="section" data-page="reports">
+<div class="panel"><h3>Reports &amp; audit history</h3><p class="hint">Download fictional CSV reports. These records are local to this browser and are not audited server-side.</p>
+<div class="actions" id="reportButtons"></div><h4>Recent demonstration activity</h4><div id="auditRows"></div></div>
+</section>
+<section class="section" data-page="admin">
+<div class="hero"><h2>Administration · JIA</h2><p>Configure simulated account types, permissions, departmental accounts and organisations. None of these controls creates secure users or grants access to a real airport system.</p></div>
+<div class="two"><div class="panel"><div class="panel-head"><h3>Account types &amp; permissions</h3></div><label class="field">Edit role type<select id="roleEditor"></select></label><div id="permissionEditor" class="permission-grid" style="margin-top:12px"></div><div class="actions"><button class="btn primary" id="saveRole">Save permissions</button></div><form id="roleForm" class="form"><label class="full">Create new account type<input name="name" required maxlength="50" placeholder="e.g. Airport Fire Service"></label><div class="full"><button class="btn">Add account type</button></div></form></div>
+<div class="panel"><h3>Register fictional account</h3><form id="userForm" class="form"><label>Account display name<input name="name" required maxlength="80" placeholder="Demo AIS Officer"></label><label>Account type<select name="role" id="newUserRole"></select></label><label>Organisation<select name="org" id="newUserOrg"></select></label><div class="full"><button class="btn primary">Create account</button></div></form>
+<h3 style="margin-top:23px">Register organisation</h3><form class="form" id="orgForm"><label>Organisation<input name="name" maxlength="90" required></label><label>Type<select name="type"><option>Airport</option><option>Airline</option><option>FBO</option><option>Ground Handler</option><option>Contractor</option><option>Other</option></select></label><div class="full"><button class="btn">Add organisation</button></div></form></div></div>
+<div class="panel"><h3>Fictional account directory</h3><p class="hint">Account activation and roles are browser-only simulation settings. The System Administrator role is protected from permission edits in this demonstration.</p><div class="table-wrap"><table><thead><tr><th>Account</th><th>Type</th><th>Organisation</th><th>Status</th><th>Actions</th></tr></thead><tbody id="userRows"></tbody></table></div>
+<div class="actions"><button type="button" class="btn danger" id="resetDemo">Reset all fictional demo data</button></div></div>
+</section>
+<footer class="muted" style="font-size:12px;border-top:1px solid #dbe4ef;padding-top:15px;margin-top:28px">Airport Airside Manager (AAM) · JSR Communications · Fictional JIA operational simulator · No production authentication, airport data, external notifications or official NOTAMs.</footer>
+</main></div>
+<div id="loginOverlay" role="dialog" aria-modal="true" aria-label="Choose a fictional departmental account" hidden>
+<div class="login-card"><h2>Explore AAM by department</h2><p>Choose a fictional JIA account. Each role has different modules and permitted actions; the Administration screen allows additional account types and users.</p>
+<label class="field">Fictional account<select id="loginChoice"></select></label><button type="button" class="btn primary" id="loginGo">Enter the demonstration</button>
+<div class="notice">No password is required because this is a <b>simulated sign-in</b>, not a real login. Anyone using this browser can select any demonstration account. Do not use the site for real airport records.</div>
+<a href="index.html">Return to AAM public overview</a></div></div>
+</body></html>
