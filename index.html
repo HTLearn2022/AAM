@@ -77,24 +77,40 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 .aviation-message-head span{font-size:10px;color:#63768e}
 .aviation-message code{display:block;white-space:normal;overflow-wrap:anywhere;font:11px/1.7 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:#233d5e}
 
+
+/* Public AAM demo navigation is independently collapsible. */
+.side-toggle{align-self:flex-end;border:1px solid #6183af;background:#214878;color:#fff;border-radius:8px;padding:7px 10px;font-size:17px;cursor:pointer}
+.wrap.sidebar-collapsed{grid-template-columns:75px minmax(0,1fr)}
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"]{padding:17px 8px}
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .brand h1,
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .brand p,
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .menu-heading,
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .side-note{display:none}
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .menu a{font-size:0;justify-content:center;padding:13px 5px}
+.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .menu a .sym{font-size:18px;width:auto}
+@media(max-width:720px){.wrap.sidebar-collapsed{display:block}.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .brand h1,.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .brand p{display:block}.wrap.sidebar-collapsed aside[aria-label="Demonstration navigation"] .menu a{font-size:11px;padding:9px 10px}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<aside aria-label="Demonstration navigation">
+<aside aria-label="Demonstration navigation"><button type="button" id="collapsePublicSidebar" class="side-toggle" aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">☰</button>
   <div class="brand"><div class="mark" aria-hidden="true">AAM</div><div><h1>Airport Airside<br>Manager</h1><p>JSR Communications</p></div></div>
   <div><div class="menu-heading">JIA · interactive demonstration</div><nav class="menu" aria-label="Modules">
     <a class="current" href="index.html" aria-current="page"><span class="sym">▦</span> Operations Hub</a>
+    <a href="portal.html"><span class="sym">⚙</span> Integrated JIA Simulator</a>
     <a href="assignments.html"><span class="sym">✈</span> Stand & Counter Assignments</a>
     <a href="airfield-inspection.html"><span class="sym">✓</span> Airfield Inspection</a>
     <a href="terminal-inspection.html"><span class="sym">▤</span> Terminal Inspection</a>
+    <a href="portal.html#issues"><span class="sym">!</span> Issues &amp; Permits</a>
+    <a href="portal.html#notams"><span class="sym">✉</span> NOTAM Requests</a>
     <a href="workflows.html"><span class="sym">▣</span> Issues, Permits &amp; NOTAM Requests</a>
   </nav></div>
   <div class="side-note"><b>JIA is fictional.</b>This is a public demonstration using invented flights and sample inspection workflows. It does not connect to live airport operations.</div>
 </aside>
 <main>
   <div class="topline"><span class="crumb">Operations Hub / Overview</span><span class="demo-tag">Fictional airport · Demonstration</span></div>
-  <section class="hero" aria-label="Airport Airside Manager product overview"><div class="eyebrow">Airport Airside Manager · JSR Communications</div><h2>One connected hub for airport operations.</h2><p>AAM is being developed to bring daily flight and resource assignments, inspections, issue reporting, permits and NOTAM requests into a coordinated, role-based airport operations platform. Explore selected working workflows below using the fictional JSR International Airport (JIA).</p><div class="hero-btm"><a class="btn yellow" href="assignments.html">Open daily assignments <span aria-hidden="true">›</span></a><a class="btn ghost" href="#modules">Explore modules</a></div></section>
+  <section class="hero" aria-label="Airport Airside Manager product overview"><div class="eyebrow">Airport Airside Manager · JSR Communications</div><h2>One connected hub for airport operations.</h2><p>AAM is being developed to bring daily flight and resource assignments, inspections, issue reporting, permits and NOTAM requests into a coordinated, role-based airport operations platform. Explore selected working workflows below using the fictional JSR International Airport (JIA).</p><div class="hero-btm"><a class="btn yellow" href="portal.html">Open integrated JIA simulator <span aria-hidden="true">›</span></a><a class="btn ghost" href="assignments.html">Legacy assignments demo</a><a class="btn ghost" href="#modules">Explore modules</a></div></section>
   <div class="section-head"><h3>Operations at a glance</h3><small id="dataLabel" aria-live="polite">Illustrative sample activity</small></div>
   <section class="metrics" aria-label="Operational summary">
     <article class="metric"><small>Flight movements</small><strong id="flightCount">13</strong><span id="flightHint">Illustrative daily schedule</span></article>
@@ -171,6 +187,15 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
     </article>
   </section>
 
+  <section class="panel" style="margin-top:17px" aria-label="Integrated fictional departmental simulator">
+    <div class="panel-h"><h3>Try AAM across airport departments</h3><small>New integrated browser-only simulator</small></div>
+    <div style="padding:17px">
+      <p style="margin:0 0 13px;color:#526981;font-size:13px">Choose a simulated Airport Operations, airline, ATC, AIS, FBO, Maintenance, manager or administrator account. Explore shared flight requests, airline-private working sheets, issue and permit approvals, inspection-generated defects, NOTAM preparation and department-level access permissions. All data remain fictional and local to your browser.</p>
+      <a class="btn yellow" href="portal.html">Launch integrated JIA operations simulator ›</a>
+      <span class="pill" style="margin-left:8px">No real authentication · No official transmissions</span>
+    </div>
+  </section>
+
   <div class="section-head" id="modules"><h3>Explore the current JIA demonstration</h3><small>Working examples of selected AAM modules · fictional data</small></div>
   <section class="modules" aria-label="Available modules">
     <article class="module"><div class="symbol" aria-hidden="true">✈</div><h4>Daily assignments</h4><p>Load an invented flight schedule, suggest stands, adjust check-in counters and gates, print a plan and review GA parking.</p><a href="assignments.html">Open assignments →</a></article>
@@ -179,9 +204,9 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
   </section>
   <div class="section-head"><h3>The wider AAM platform</h3><small>New browser-only workflow previews available · secure integrations still in development</small></div>
   <section class="modules" aria-label="Planned AAM platform capabilities">
-    <article class="module"><div class="symbol" aria-hidden="true">!</div><h4>Issues &amp; defects</h4><p>Try fictional issue reporting, ownership, due dates, resolution and sign-off. Automatic reminders and inspection-generated issues remain future work.</p><a href="workflows.html#issues">Open workflow preview →</a></article>
-    <article class="module"><div class="symbol" aria-hidden="true">▣</div><h4>Permits &amp; approvals</h4><p>Try a fictional hot works or airside works request, with simulated approval, activation and close-out.</p><a href="workflows.html#permits">Open workflow preview →</a></article>
-    <article class="module"><div class="symbol" aria-hidden="true">✉</div><h4>NOTAM requests</h4><p>Prepare a fictional request, mark it reviewed and ready for AIS. No actual NOTAM is transmitted or issued.</p><a href="workflows.html#notams">Open workflow preview →</a></article>
+    <article class="module"><div class="symbol" aria-hidden="true">!</div><h4>Issues &amp; defects</h4><p>Try fictional issue reporting, ownership, due dates, resolution and sign-off. Automatic reminders and inspection-generated issues remain future work.</p><a href="portal.html#issues">Open integrated Issues &amp; Permits →</a></article>
+    <article class="module"><div class="symbol" aria-hidden="true">▣</div><h4>Permits &amp; approvals</h4><p>Try a fictional hot works or airside works request, with simulated approval, activation and close-out.</p><a href="portal.html#permits">Open integrated Issues &amp; Permits →</a></article>
+    <article class="module"><div class="symbol" aria-hidden="true">✉</div><h4>NOTAM requests</h4><p>Prepare a fictional request, mark it reviewed and ready for AIS. No actual NOTAM is transmitted or issued.</p><a href="portal.html#notams">Open integrated NOTAM Requests →</a></article>
     <article class="module"><div class="symbol" aria-hidden="true">▤</div><h4>Airline private workspace</h4><p>Maintain internal working schedules with private rows, notes and printing, separate from requests sent to Airport Operations.</p><span class="pill">In development</span></article>
     <article class="module"><div class="symbol" aria-hidden="true">♙</div><h4>Role-based departmental access</h4><p>Tailored views for Operations, airlines, handlers, Maintenance, ATC, managers and other authorised users.</p><span class="pill">In development</span></article>
     <article class="module"><div class="symbol" aria-hidden="true">▦</div><h4>Shared airport records</h4><p>Bring operational dashboards, follow-ups, approvals, audit trails and airport-specific configurations together.</p><span class="pill">In development</span></article>
@@ -286,6 +311,16 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
   drawMap(state,t);
  }
  $$('viewTime').addEventListener('input',paint);$$('resetTime').addEventListener('click',()=>{$$('viewTime').value='12:30';paint()});window.addEventListener('pageshow',paint);window.addEventListener('storage',paint);document.addEventListener('visibilitychange',()=>{if(!document.hidden)paint()});paint();
+})();
+</script>
+<script>
+(function(){
+ var root=document.querySelector('.wrap'),button=document.getElementById('collapsePublicSidebar');
+ if(!root||!button)return;
+ try{if(localStorage.getItem('aam-public-sidebar-v1')==='1')root.classList.add('sidebar-collapsed')}catch(e){}
+ function sync(){var collapsed=root.classList.contains('sidebar-collapsed');button.setAttribute('aria-expanded',String(!collapsed));button.setAttribute('aria-label',collapsed?'Expand sidebar':'Collapse sidebar');button.title=collapsed?'Expand sidebar':'Collapse sidebar'}
+ button.addEventListener('click',function(){root.classList.toggle('sidebar-collapsed');try{localStorage.setItem('aam-public-sidebar-v1',root.classList.contains('sidebar-collapsed')?'1':'0')}catch(e){}sync()});
+ sync();
 })();
 </script>
 </body>
