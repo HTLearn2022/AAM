@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JIA Stand and Counter Assignments</title>
+<style>
+:root{
+  --navy:#0b3a82; --navy-2:#0a2f69; --blue:#1d6fd6; --yellow:#f2c400; --green:#2f8f3a;
+  --day:#2f9e55; --night:#1592d6;
+  --bg:#eef2f7; --card:#ffffff; --ink:#152033; --muted:#5d6b80; --line:#d8dfe9; --soft:#f5f7fb;
+  --warn:#b45309; --warn-bg:#fff4e0; --bad:#b42318; --bad-bg:#fdecea; --ok-bg:#e7f6ec;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+.logo{background:#fff;border-radius:8px;padding:3px 6px;height:42px;display:flex;align-items:center}
+.logo img{height:36px;display:block}
+.ttl{flex:1;min-width:0}
+.ttl b{display:block;font-size:16px;letter-spacing:.02em}
+.ttl span{font-size:12.5px;opacity:.8}
+.top .icon-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+.top .icon-btn:hover{background:rgba(255,255,255,.22)}
+nav.tabs{background:var(--navy-2)}
+.tabs-in{max-width:1180px;margin:0 auto;display:flex;gap:4px;padding:0 10px;overflow-x:auto}
+.tab{background:none;border:0;color:#cfdaf0;padding:11px 14px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-weight:600}
+.tab[aria-selected="true"]{color:#fff;border-color:var(--yellow)}
+.tab .pill{display:inline-block;margin-left:6px;font-size:11.5px;padding:1px 7px;border-radius:10px;background:rgba(255,255,255,.15);font-weight:600}
+main{max-width:1180px;margin:0 auto;padding:16px 16px 120px}
+section.page{display:none}
+section.page.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.card h2{font-size:15px;margin:0 0 12px;letter-spacing:.03em;text-transform:uppercase;color:var(--navy)}
+.card h3{font-size:14px;margin:14px 0 8px;color:var(--navy)}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+input[type=text],input[type=date],input[type=time],input[type=number],input[type=email],select,textarea{
+  width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 11px;font-size:15px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink);min-height:42px}
+textarea{resize:vertical;min-height:90px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.hint{font-size:12.5px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.hint.red{color:var(--bad);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:none;padding:10px 16px;cursor:pointer;font-weight:600;color:var(--muted);min-height:42px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.seg.shift button[data-v="day"][aria-pressed="true"]{background:var(--day)}
+.seg.shift button[data-v="night"][aria-pressed="true"]{background:var(--night)}
+.seg.yn button[data-v="yes"][aria-pressed="true"]{background:var(--warn)}
+.seg.yn button[data-v="no"][aria-pressed="true"]{background:var(--green)}
+.q{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:10px;background:var(--soft);border:1px solid var(--line)}
+.q p{margin:0;font-weight:600;max-width:640px}
+.q small{display:block;font-weight:400;color:var(--muted);margin-top:3px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600;min-height:44px;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:hover{border-color:#b9c5d6}
+.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.primary:hover{background:var(--navy-2)}
+.btn.go{background:var(--green);border-color:var(--green);color:#fff}
+.btn.sm{padding:6px 11px;min-height:34px;font-size:13.5px}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad)}
+.row-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.spacer{flex:1}
+/* checklist */
+.cl-bar{position:sticky;top:105px;z-index:10;display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--bg);padding:8px 0 10px}
+.fac{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.fac-h{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--soft);border-bottom:1px solid var(--line)}
+.fac-h b{flex:1;font-size:13.5px;letter-spacing:.04em;color:var(--navy)}
+.fac-h .cnt{font-size:12.5px;color:var(--muted)}
+.it{display:grid;grid-template-columns:170px 46px 46px minmax(0,1fr) 100px 170px;gap:8px;align-items:start;padding:9px 14px;border-top:1px solid var(--line)}
+.it:first-of-type{border-top:0}
+.it .nm{font-weight:600;font-size:13.5px;padding-top:10px}
+.tick{width:46px;height:42px;border-radius:9px;border:2px solid var(--line);background:#fff;cursor:pointer;font-weight:800;color:#9aa6b8;font-size:13px;display:flex;align-items:center;justify-content:center;gap:2px}
+.tick.d[aria-pressed="true"]{background:var(--day);border-color:var(--day);color:#fff}
+.tick.n[aria-pressed="true"]{background:var(--night);border-color:var(--night);color:#fff}
+.tick.dim{opacity:.55}
+.tick svg{width:14px;height:14px}
+.other{font-size:12.5px;color:var(--muted);margin-top:4px;padding-left:2px}
+.other b{font-weight:600}
+.it select,.it input{min-height:42px}
+.it.flag{background:#fffaf0}
+.col-h{display:grid;grid-template-columns:170px 46px 46px minmax(0,1fr) 100px 170px;gap:8px;padding:6px 14px;font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.col-h .cd{color:var(--day)} .col-h .cn{color:var(--night)}
+@media (max-width:860px){
+  .col-h{display:none}
+  .it{grid-template-columns:1fr 1fr 46px 46px;}
+  .it .nm{grid-column:1/3;padding-top:10px}
+  .it .rem-w{grid-column:1/-1}
+  .it .notam{grid-column:1/2}
+  .it .res{grid-column:2/-1}
+  .it .notam,.it .res{font-size:14px}
+  .cl-bar{top:105px}
+}
+/* RCR */
+.thirds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.thirds{grid-template-columns:1fr}}
+.third{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--soft)}
+.third h4{margin:0 0 10px;font-size:13.5px;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:center}
+.cc{font-size:22px;font-weight:800;color:#fff;background:var(--navy);border-radius:8px;min-width:44px;text-align:center;padding:2px 8px}
+.third .grid{gap:9px}
+.chk{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;user-select:none;font-size:14px;min-height:40px}
+.chk input{width:18px;height:18px;accent-color:var(--navy)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.rcr-out{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:17px;font-weight:700;background:#0f1b2e;color:#ffe27a;border-radius:10px;padding:14px 16px;word-break:break-word;letter-spacing:.03em}
+.notice{border-radius:10px;padding:12px 14px;font-size:14px}
+.notice.warn{background:var(--warn-bg);color:#7a3b06;border:1px solid #f3d19e}
+.notice.ok{background:var(--ok-bg);color:#1d5b2a;border:1px solid #bfe3c9}
+.notice.bad{background:var(--bad-bg);color:#8a1c12;border:1px solid #f3c2bc}
+.notice.info{background:#e8f1fd;color:#123e7a;border:1px solid #c3d8f5}
+.rcam{width:100%;border-collapse:collapse;font-size:14px}
+.rcam td,.rcam th{border:1px solid var(--line);padding:7px 10px;text-align:left}
+.rcam th{background:var(--soft)}
+/* review */
+.sumlist{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.sumlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px}
+.stat b{display:block;font-size:22px;color:var(--navy)}
+.stat span{font-size:12.5px;color:var(--muted)}
+.issues{margin:0;padding-left:18px}
+.issues li{margin:4px 0}
+.sendbox{display:flex;flex-wrap:wrap;gap:10px}
+.sendbox .btn{flex:1 1 200px}
+/* bottom bar */
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(6px);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.bottom-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.saved{font-size:12.5px;color:var(--muted)}
+/* modal */
+dialog{border:0;border-radius:14px;padding:0;max-width:640px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,20,40,.45)}
+.dlg-h{padding:14px 18px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between}
+.dlg-h b{font-size:16px}
+.dlg-b{padding:18px;max-height:70vh;overflow:auto}
+.dlg-f{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.x{background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1}
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.hist li b{flex:1;min-width:160px}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:#14213a;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
+.toast.on{opacity:1}
+@media (max-width:600px){.top-in{gap:10px;padding:8px 12px}.logo{height:36px}.logo img{height:30px}.ttl b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ttl span{white-space:nowrap}.ttl span{font-size:11.5px}.top .icon-btn{padding:7px 9px;font-size:13px}.cl-bar{top:97px}}
+@media print{header,nav,.bottom{display:none}}
+
+.scroll{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:6px 6px;border-bottom:2px solid var(--line);white-space:nowrap}
+.tbl td{padding:5px 5px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl input[type=text],.tbl input[type=time],.tbl input[type=date],.tbl input[type=number],.tbl select{min-height:36px;padding:6px 7px;font-size:14px}
+.tbl tr.flag td{background:var(--warn-bg)}
+.tbl th.c,.tbl td.c{text-align:center}
+.w-c{min-width:128px}.w-g{min-width:100px}
+#conTbl td{white-space:nowrap}
+.tbl input.man,.tbl select.man{font-weight:700;border-color:var(--navy);background:#eef4ff}
+.w-s{min-width:76px}.w-m{min-width:112px}.w-t{min-width:100px}.w-d{min-width:140px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--soft);border:1px solid var(--line);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+.tag.bad{background:var(--bad-bg);color:var(--bad);border-color:#f3c2bc}
+.tag.ok{background:var(--ok-bg);color:#1d5b2a;border-color:#bfe3c9}
+.sumlist.sum6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:900px){.sumlist.sum6{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.apron{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.bay{border:1px solid var(--line);border-top:6px solid var(--green);border-radius:10px;padding:10px;background:var(--soft)}
+.bay.on{border-top-color:var(--yellow);background:#fffbe6}
+.bay.ga{border-style:dashed}
+.bay b{display:block}.bay small{display:block;color:var(--muted);font-size:12.5px}
+@media print{.row-actions,.icon-btn{display:none}main{padding:0}.card{break-inside:avoid}}
+</style>
+
+<style id="aam-demo-navigation">
+.aam-return{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:6px;font:600 13px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif} .aam-return a{color:#0b3a82;text-decoration:none;background:#fff;border:1px solid #d8dfe9;border-radius:9px;padding:8px 12px} .aam-return a:hover,.aam-return a:focus-visible{outline:2px solid #1d6fd6;outline-offset:2px} .aam-return span{color:#5d6b80;font-weight:400} @media print{.aam-return{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo"><svg viewBox="0 0 96 36" height="36" role="img" aria-label="JIA"><line x1="4" y1="29" x2="34" y2="9" stroke="#0b3a82" stroke-width="5" stroke-linecap="round"/><line x1="16" y1="31" x2="46" y2="11" stroke="#f2c400" stroke-width="5" stroke-linecap="round"/><text x="52" y="26" font-family="Arial,sans-serif" font-weight="700" font-size="20" fill="#0b3a82">JIA</text></svg></div>
+    <div class="ttl"><b>DAILY STAND AND COUNTER ASSIGNMENTS</b><span id="hdrSub">JSR International Airport · Operations</span></div>
+    <button class="icon-btn" id="btnSample" title="Fill the day with invented flights">Load sample day</button>
+    <button class="icon-btn" id="btnPrint" title="Print or save as PDF">Print</button>
+  </div>
+  <nav class="tabs"><div class="tabs-in" role="tablist">
+    <button class="tab" role="tab" data-p="sched" aria-selected="true">1 · Schedule &amp; Parking <span class="pill" id="pillSch">0</span></button>
+    <button class="tab" role="tab" data-p="counters">2 · Counters &amp; Gates <span class="pill" id="pillCon">–</span></button>
+    <button class="tab" role="tab" data-p="dash">3 · Dashboard</button>
+    <button class="tab" role="tab" data-p="ga">4 · GA Register <span class="pill" id="pillGa">0</span></button>
+    <button class="tab" role="tab" data-p="rules">5 · Rules</button>
+  </div></nav>
+</header>
+<div class="aam-return"><a href="index.html" aria-label="Return to Airport Airside Manager demonstration dashboard">← AAM Operations Hub</a><span>Fictional JIA demonstration · Browser-only data</span></div>
+
+
+<main>
+<section class="page on" id="p-sched">
+  <div class="card">
+    <h2>Day</h2>
+    <div class="grid g2">
+      <label class="f">Effective date<input type="date" data-b="date"></label>
+      <label class="f">Updated by<input type="text" data-b="updatedBy" placeholder="Your name or post"></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Schedule and parking</h2>
+    <div class="row-actions" style="margin-bottom:12px">
+      <button class="btn primary" id="btnSuggest">Suggest stands</button>
+      <button class="btn" id="btnAdd">Add flight</button>
+      <span class="spacer"></span>
+      <button class="btn sm ghost" id="btnClearStands">Clear stands</button>
+      <button class="btn sm danger" id="btnClearDay">Clear day</button>
+    </div>
+    <div class="scroll"><table class="tbl" id="schTbl">
+      <thead><tr><th>A/C type</th><th>Flight</th><th>Arr.</th><th>ETA</th><th>ETD</th><th>Dep.</th><th>Overnight</th><th>Stand</th><th>Alt. stand</th><th>Check</th><th></th></tr></thead>
+      <tbody id="schBody"></tbody>
+    </table></div>
+    <p class="hint" id="schEmpty">No flights yet. Add a flight, or use “Load sample day” at the top to see how it works.</p>
+    <p class="hint">“Suggest stands” fills only the blank stands. It picks the smallest stand that fits the aircraft and is free, and offers an alternate. Stands you chose yourself are left alone.</p>
+  </div>
+  <div class="card">
+    <h2>Import flights</h2>
+    <p class="hint" style="margin-top:0">Bring in a CSV file, or copy rows from a spreadsheet and paste them below. Columns in this order: <b>A/C type, Flight, Arr. (Int/Dom), ETA, ETD, Dep. (Int/Dom)</b>. A header row is fine and lets the columns be in any order. Write <b>O/N</b> in place of a time for an overnight aircraft. Imported flights are added to the ones already here.</p>
+    <textarea id="pasteBox" rows="5" placeholder="AT76, KX 310, Int, 08:45, 09:35, Int"></textarea>
+    <div class="row-actions" style="margin-top:10px">
+      <button class="btn primary" id="btnPaste">Add pasted flights</button>
+      <button class="btn" id="btnCsv">Import CSV file</button>
+      <input type="file" id="csvIn" accept=".csv,.txt,.tsv,text/csv,text/plain" hidden>
+    </div>
+  </div>
+  <div class="row-actions"><span class="spacer"></span><button class="btn primary" data-go="counters">Next: Counters &amp; gates →</button></div>
+</section>
+
+<section class="page" id="p-counters">
+  <div class="card">
+    <h2>Check-in counters, gates and baggage belts</h2>
+    <p class="hint" style="margin-top:0">Worked out from the schedule and the Rules tab. Type over any counter or pick another gate to change it; your changes show in bold and the rest is worked out around them. Clear a box to go back to automatic.</p>
+    <div class="row-actions" style="margin-bottom:10px"><span class="spacer"></span><button class="btn sm ghost" id="ovReset">Reset all to automatic</button></div>
+    <div class="scroll"><table class="tbl" id="conTbl">
+      <thead><tr><th>A/C</th><th>Flight</th><th class="c">Check-in opens</th><th class="c">ETA</th><th class="c">Check-in closes</th><th class="c">ETD</th><th>Main counters</th><th>Second counters</th><th>Alt. counters</th><th>Gate</th><th class="c">Belt</th></tr></thead>
+      <tbody id="conBody"></tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <h2>Conflict log</h2>
+    <div id="conLog"></div>
+  </div>
+  <div class="row-actions"><button class="btn" data-go="sched">← Schedule</button><span class="spacer"></span><button class="btn primary" data-go="dash">Next: Dashboard →</button></div>
+</section>
+
+<section class="page" id="p-dash">
+  <div class="card">
+    <h2>Operations dashboard</h2>
+    <div class="row-actions" style="margin-bottom:12px">
+      <label class="f" style="max-width:170px">Time now<input type="time" id="nowIn"></label>
+      <button class="btn sm" id="nowBtn" style="align-self:flex-end">Use current time</button>
+      <span class="spacer"></span>
+      <span class="hint" id="dashMeta" style="align-self:flex-end"></span>
+    </div>
+    <div class="sumlist sum6" id="tiles"></div>
+  </div>
+  <div class="card">
+    <h2>Apron map · right now</h2>
+    <div class="apron" id="apron"></div>
+  </div>
+  <div class="card">
+    <h2>Stands · right now</h2>
+    <div class="scroll"><table class="tbl"><thead><tr><th>Stand</th><th>On stand now</th><th>Next in</th><th>ETA</th></tr></thead><tbody id="standBody"></tbody></table></div>
+  </div>
+  <div class="card">
+    <h2>Needs attention</h2>
+    <div id="dashIssues"></div>
+  </div>
+  <div class="card">
+    <h2>Weather and NOTAMs</h2>
+    <div class="notice info">The live METAR, TAF and NOTAM feed for the airport would show here once the tool is connected for a real aerodrome.</div>
+  </div>
+</section>
+
+<section class="page" id="p-ga">
+  <div class="card">
+    <h2>GA parking register</h2>
+    <p class="hint" style="margin-top:0">One row per stay. A stay keeps its spot blocked on every day between arrival and departure, so multi-day visitors never drop off the board.</p>
+    <div class="row-actions" style="margin-bottom:12px"><button class="btn primary" id="gaAdd">Add stay</button><span class="spacer"></span><span class="hint" id="gaCount"></span></div>
+    <div class="scroll"><table class="tbl">
+      <thead><tr><th>Registration</th><th>Aircraft type</th><th>Operator / handler</th><th>Arrival</th><th>Departure</th><th>Spot</th><th>Status</th><th>Nights</th><th>Check</th><th></th></tr></thead>
+      <tbody id="gaBody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="page" id="p-rules">
+  <div class="card">
+    <h2>Timing rules (minutes)</h2>
+    <div class="grid g4">
+      <label class="f">Int. check-in opens before ETD<input type="number" min="0" data-r="intOpen"></label>
+      <label class="f">Int. check-in closes before ETD<input type="number" min="0" data-r="intClose"></label>
+      <label class="f">Dom. check-in opens before ETD<input type="number" min="0" data-r="domOpen"></label>
+      <label class="f">Dom. check-in closes before ETD<input type="number" min="0" data-r="domClose"></label>
+      <label class="f">Turnaround when a time is missing<input type="number" min="0" data-r="turn"></label>
+      <label class="f">Gap between aircraft on a stand<input type="number" min="0" data-r="buffer"></label>
+      <label class="f">Belt in use after arrival<input type="number" min="0" data-r="belt"></label>
+      <label class="f">International counters<input type="number" min="1" max="60" data-r="intCounters"></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Aircraft types</h2>
+    <p class="hint" style="margin-top:0">Size decides which stands fit: S small, M medium, L large. Main, second and alt are how many check-in counters each set gets for that type (main 0 for cargo).</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>Type code</th><th>Size (S/M/L)</th><th>Main counters</th><th>Second counters</th><th>Alt. counters</th><th></th></tr></thead><tbody data-list="ac"></tbody></table></div>
+    <div class="row-actions" style="margin-top:8px"><button class="btn sm" data-addrow="ac">Add aircraft type</button></div>
+  </div>
+  <div class="card">
+    <h2>Airlines</h2>
+    <p class="hint" style="margin-top:0">The flight number’s first two characters pick the airline. “First counter” is where that airline’s check-in block should start, if it is free.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>Code</th><th>Airline</th><th>Passenger / Cargo</th><th>First counter</th><th></th></tr></thead><tbody data-list="airlines"></tbody></table></div>
+    <div class="row-actions" style="margin-top:8px"><button class="btn sm" data-addrow="airlines">Add airline</button></div>
+  </div>
+  <div class="card">
+    <h2>Stands</h2>
+    <div class="scroll"><table class="tbl"><thead><tr><th>Stand</th><th>Largest size (S/M/L)</th><th></th></tr></thead><tbody data-list="stands"></tbody></table></div>
+    <div class="row-actions" style="margin-top:8px"><button class="btn sm" data-addrow="stands">Add stand</button><span class="spacer"></span><button class="btn sm danger" id="rulesReset">Reset all rules</button></div>
+  </div>
+</section>
+</main>
+
+<div class="bottom"><div class="bottom-in">
+  <span class="saved" id="savedMsg">Saved on this device</span>
+  <span class="spacer"></span>
+  <button class="btn sm" id="bPrev">← Back</button>
+  <button class="btn sm primary" id="bNext">Next →</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const LS="jia-stands-v1";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(m,ms){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),ms||2600)}
+function todayISO(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function addDays(iso,n){const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return todayISO(d)}
+function longDate(iso){if(!iso)return '';return new Date(iso+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function toMin(t){if(!t)return null;const p=String(t).split(':');const v=(+p[0])*60+(+p[1]);return isNaN(v)?null:v}
+function fmt(m){if(m==null)return '';m=Math.max(0,Math.min(1439,Math.round(m)));return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+const pad=n=>String(n).padStart(2,'0');
+const RANK={S:1,M:2,L:3};
+
+function defRules(){return {intOpen:180,intClose:60,domOpen:45,domClose:15,turn:45,buffer:10,belt:30,intCounters:24,
+  ac:[['DHC6','S',1,0,0],['BN2','S',1,0,0],['C208','S',0,0,0],['AT45','M',2,2,1],['AT76','M',2,2,1],['E145','M',2,2,1],['CRJ7','M',2,2,1],['E190','L',2,2,1],['A320','L',2,2,1],['B738','L',2,2,1],['A333','L',3,2,1]],
+  airlines:[['JS','JSR Air','Passenger','1'],['KX','Kite Express','Passenger','7'],['CW','Coral Wings','Passenger','12'],['IH','Island Hopper','Passenger',''],['TC','Tradewind Cargo','Cargo','']],
+  stands:[['Stand 1','S'],['Stand 2','S'],['Stand 3','M'],['Stand 4','M'],['Stand 5','L'],['Stand 6','L'],['Stand 7L','L'],['Stand 7','L'],['Stand 8','L'],['Stand 9','M'],['Stand 10','M'],['Cargo','L']]}}
+const DOM_DESKS=['Dom. desk 1','Dom. desk 2'], GATES_INT=['Gate 2','Gate 3','Gate 4'], GATES_DOM=['Gate 1'], BELTS_INT=['Belt 1','Belt 2'], BELTS_DOM=['Belt 3'], GA_SPOTS=['G1','G2','G3','G4','G5','G6','G7','G8','G9'];
+const GA_STATUS=['Provisional','Confirmed','On the ground','Departed'];
+
+function blank(){return {v:1,date:todayISO(),updatedBy:'',now:'',flights:[],ga:[],rules:defRules(),seq:1}}
+function lsGet(){try{const v=localStorage.getItem(LS);return v?JSON.parse(v):null}catch(e){return null}}
+let S=Object.assign(blank(),lsGet()||{}); if(!S.rules||!S.rules.ac)S.rules=defRules();
+S.rules.ac.forEach(a=>{if(a.length<5){const m=Number(a[2])||0;a[3]=m>=2?2:0;a[4]=m>=2?1:0}}); S.flights.forEach(f=>{if(!f.ov)f.ov={}});
+let saveT=null;
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{let ok=true;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){ok=false}
+  $('#savedMsg').textContent=ok?'Saved on this device · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'Not saved (storage is blocked in this browser)'},250)}
+
+/* ---------- lookups ---------- */
+const R=()=>S.rules;
+function acInfo(code){return R().ac.find(a=>a[0]===code)||null}
+function airlineOf(f){const c=(String(f.flight||'').trim().match(/^[A-Za-z0-9]{2}/)||[''])[0].toUpperCase();return R().airlines.find(a=>String(a[0]).toUpperCase()===c)||null}
+function isCargo(f){const al=airlineOf(f),ac=acInfo(f.ac);return (al&&al[2]==='Cargo')||(ac&&Number(ac[2])===0)}
+function standDef(n){return R().stands.find(s=>s[0]===n)||null}
+function win(f){const a=toMin(f.eta),d=toMin(f.etd),t=Number(R().turn)||45;if(a==null&&d==null)return null;
+  const start=a!=null?a:(f.on==='dep'?0:Math.max(0,d-t)); const end=d!=null?d:(f.on==='arr'?1439:Math.min(1439,a+t));
+  return [start,Math.max(end,start+1)]}
+function overlap(a,b,buf){return a[0]<b[1]+buf&&b[0]<a[1]+buf}
+function sortKey(f){const w=win(f);return w?w[0]:9999}
+
+/* ---------- stand logic ---------- */
+function standIssues(){
+  const out={}; const add=(id,m)=>{(out[id]=out[id]||[]).push(m)}; const buf=Number(R().buffer)||0;
+  S.flights.forEach(f=>{const ac=acInfo(f.ac),w=win(f);
+    if(!f.flight)add(f.id,'No flight number');
+    if(!ac)add(f.id,'Choose an aircraft type');
+    if(!w)add(f.id,'No ETA or ETD');
+    if(!f.stand)add(f.id,'No stand');
+    else{const st=standDef(f.stand); if(!st)add(f.id,f.stand+' is not in the Rules'); else if(ac&&RANK[ac[1]]>RANK[st[1]])add(f.id,f.ac+' is too large for '+f.stand);}
+  });
+  for(let i=0;i<S.flights.length;i++)for(let j=i+1;j<S.flights.length;j++){const a=S.flights[i],b=S.flights[j];
+    if(!a.stand||a.stand!==b.stand)continue;const wa=win(a),wb=win(b);if(!wa||!wb)continue;
+    if(overlap(wa,wb,buf)){add(a.id,'Clashes with '+(b.flight||'another flight')+' on '+a.stand);add(b.id,'Clashes with '+(a.flight||'another flight')+' on '+b.stand);}}
+  return out;
+}
+function suggestStands(){
+  const buf=Number(R().buffer)||0, occ={}; R().stands.forEach(s=>occ[s[0]]=[]);
+  S.flights.forEach(f=>{const w=win(f);if(f.stand&&w&&occ[f.stand])occ[f.stand].push(w)});
+  let placed=0,missed=0;
+  S.flights.slice().sort((a,b)=>sortKey(a)-sortKey(b)).forEach(f=>{
+    if(f.stand)return; const w=win(f),ac=acInfo(f.ac); if(!w||!ac){missed++;return}
+    const cargo=isCargo(f);
+    let cands=R().stands.filter(s=>RANK[s[1]]>=RANK[ac[1]]).slice().sort((a,b)=>RANK[a[1]]-RANK[b[1]]);
+    const cg=cands.filter(s=>/cargo/i.test(s[0])), rest=cands.filter(s=>!/cargo/i.test(s[0]));
+    cands=cargo?cg.concat(rest):rest;
+    const free=cands.filter(s=>!occ[s[0]].some(o=>overlap(o,w,buf)));
+    if(free.length){f.stand=free[0][0];f.alt=free[1]?free[1][0]:'';occ[f.stand].push(w);placed++}else missed++;
+  });
+  save();renderSched();
+  toast(placed+' stand'+(placed===1?'':'s')+' suggested'+(missed?' · '+missed+' could not be placed':''),3500);
+}
+
+/* ---------- counters, gates, belts ---------- */
+function label(a,b){return a===b?'Counter '+pad(a):'Counter '+pad(a)+'-'+pad(b)}
+function parseRange(t){const m=String(t||'').match(/(\d+)(?:\s*(?:-|–|to)\s*(\d+))?/);if(!m)return null;const x=+m[1],y=m[2]?+m[2]:x;return x>=1&&y>=x?[x,y]:null}
+function compute(){
+  const r=R(), N=Math.max(1,Number(r.intCounters)||24), log=[], rows={};
+  const occC=Array.from({length:N+1},()=>[]), occD={}, occG={}, occB={};
+  const free=(list,w)=>!list.some(o=>overlap(o,w,0));
+  const pick=(names,store,w)=>{for(const n of names){store[n]=store[n]||[];if(free(store[n],w)){store[n].push(w);return n}}return ''};
+  const blockFree=(s,n,w)=>{if(s<1||s+n-1>N)return false;for(let c=s;c<s+n;c++)if(!free(occC[c],w))return false;return true};
+  const take=(s,n,w)=>{for(let c=s;c<s+n;c++)occC[c].push(w)};
+  S.flights.forEach(f=>rows[f.id]={f,dep:false,dom:false,open:null,close:null,main:'',second:'',alt:'',gate:'',belt:'',man:{}});
+  const deps=S.flights.filter(f=>toMin(f.etd)!=null&&!isCargo(f)).sort((a,b)=>toMin(a.etd)-toMin(b.etd));
+  deps.forEach(f=>{const row=rows[f.id], d=toMin(f.etd); row.dep=true; row.dom=f.depCat==='Dom';
+    row.open=d-(row.dom?Number(r.domOpen):Number(r.intOpen)); row.close=d-(row.dom?Number(r.domClose):Number(r.intClose));
+    row.w=[Math.max(0,row.open),Math.max(1,row.close)]; row.gw=[Math.max(0,row.close),d]});
+  /* your own changes are placed first, and everything else is worked out around them */
+  deps.forEach(f=>{const row=rows[f.id], ov=f.ov||{};
+    ['main','second','alt'].forEach(k=>{const t=(ov[k]||'').trim(); if(!t)return; row.man[k]=true;
+      const desk=DOM_DESKS.find(n=>n.toLowerCase()===t.toLowerCase()), rg=desk?null:parseRange(t);
+      if(desk){occD[desk]=occD[desk]||[]; if(!free(occD[desk],row.w))log.push([f,desk+' (your change) is already in use at that time']); occD[desk].push(row.w); row[k]=desk}
+      else if(rg&&rg[1]<=N){if(!blockFree(rg[0],rg[1]-rg[0]+1,row.w))log.push([f,label(rg[0],rg[1])+' (your change) clashes with another flight']); take(rg[0],rg[1]-rg[0]+1,row.w); row[k]=label(rg[0],rg[1])}
+      else{row[k]=t; log.push([f,'“'+t+'” is not a counter this airport has (1 to '+N+')'])}});
+    if(ov.gate){row.man.gate=true; row.gate=ov.gate; occG[ov.gate]=occG[ov.gate]||[]; if(!free(occG[ov.gate],row.gw))log.push([f,ov.gate+' (your change) is already in use for boarding at that time']); occG[ov.gate].push(row.gw)}});
+  deps.forEach(f=>{const row=rows[f.id], ac=acInfo(f.ac), w=row.w, span=fmt(row.open)+'–'+fmt(row.close);
+    if(row.dom){ if(!row.man.main){row.main=pick(DOM_DESKS,occD,w); if(!row.main)log.push([f,'No domestic desk free for check-in '+span])} }
+    else{
+      const need=[Math.max(1,ac?Number(ac[2])||1:1), ac?Number(ac[3])||0:0, ac?Number(ac[4])||0:0];
+      const al=airlineOf(f); let pref=al?parseInt(al[3],10):NaN; const hasPref=!isNaN(pref)&&pref>=1&&pref<=N; if(!hasPref)pref=1;
+      let last=row.man.main&&parseRange(row.main)?parseRange(row.main)[1]:0;
+      ['main','second','alt'].forEach((k,i)=>{ if(row.man[k]){const rg=parseRange(row[k]);if(rg)last=rg[1];return} const n=need[i]; if(!n)return;
+        const first=i===0?pref:(last?last+1:pref); const starts=[]; for(let s=first;s<=N-n+1;s++)starts.push(s); for(let s=1;s<first;s++)starts.push(s);
+        const got=starts.find(s=>blockFree(s,n,w));
+        if(got){take(got,n,w); row[k]=label(got,got+n-1); last=got+n-1; if(i===0&&hasPref&&got!==pref)log.push([f,'Usual counters were busy, main moved to '+row[k]])}
+        else log.push([f,'No '+k+' block of '+n+' counter'+(n===1?'':'s')+' free '+span]) });
+    }
+    if(!row.man.gate){row.gate=pick(row.dom?GATES_DOM:GATES_INT,occG,row.gw); if(!row.gate)log.push([f,'No '+(row.dom?'domestic':'international')+' gate free for boarding '+fmt(row.close)+'–'+fmt(toMin(f.etd))])}
+  });
+  S.flights.filter(f=>toMin(f.eta)!=null&&!isCargo(f)).sort((a,b)=>toMin(a.eta)-toMin(b.eta)).forEach(f=>{
+    const a=toMin(f.eta), dom=f.arrCat==='Dom'; rows[f.id].belt=pick(dom?BELTS_DOM:BELTS_INT,occB,[a,a+(Number(r.belt)||30)]);
+    if(!rows[f.id].belt)log.push([f,'No '+(dom?'domestic':'international')+' belt free at '+fmt(a)]);
+  });
+  const list=Object.values(rows).sort((x,y)=>{const k=o=>toMin(o.f.etd)??toMin(o.f.eta)??9999;return k(x)-k(y)});
+  return {list,log};
+}
+
+/* ---------- import ---------- */
+function splitLine(line,d){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];
+  if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++}else q=false}else cur+=c}
+  else if(c==='"')q=true; else if(c===d){out.push(cur);cur=''} else cur+=c}
+  out.push(cur);return out.map(x=>x.trim())}
+function normTime(t){t=String(t||'').trim();if(!t)return '';let m=t.match(/^(\d{1,2})[:.h](\d{2})(?::\d{2})?\s*([ap]m)?$/i);
+  if(!m){const n=t.match(/^(\d{2})(\d{2})$/);if(n)m=[0,n[1],n[2],''];}
+  if(!m)return null;let h=+m[1];const mi=+m[2],ap=(m[3]||'').toLowerCase();if(ap==='pm'&&h<12)h+=12;if(ap==='am'&&h===12)h=0;
+  return h>23||mi>59?null:pad(h)+':'+pad(mi)}
+function normCat(c){c=String(c||'').trim().toLowerCase();return c.startsWith('i')?'Int':c.startsWith('d')?'Dom':''}
+function importText(text){
+  const lines=String(text||'').replace(/\r/g,'').split('\n').filter(l=>l.trim());
+  if(!lines.length){toast('Nothing to import');return}
+  const d=lines[0].includes('\t')?'\t':lines[0].includes(';')&&!lines[0].includes(',')?';':',';
+  let rowsIn=lines.map(l=>splitLine(l,d)), map={ac:0,flight:1,arrCat:2,eta:3,etd:4,depCat:5,on:6};
+  const h=rowsIn[0].map(x=>x.toLowerCase());
+  if(h.some(x=>/flight|call ?sign/.test(x))){map={};h.forEach((x,i)=>{
+      const k=/\beta\b|\bsta\b|arr.*time/.test(x)?'eta':/\betd\b|\bstd\b|dep.*time/.test(x)?'etd':/o\/n|overnight/.test(x)?'on':/flight|call ?sign/.test(x)?'flight':/type|a\/c|aircraft/.test(x)?'ac':/arr/.test(x)?'arrCat':/dep/.test(x)?'depCat':null;
+      if(k&&map[k]==null)map[k]=i});rowsIn=rowsIn.slice(1)}
+  let added=0;const bad=[];
+  rowsIn.forEach((c,n)=>{const g=k=>map[k]!=null?(c[map[k]]||''):'';
+    const flight=g('flight').toUpperCase().trim(); if(!flight){bad.push('row '+(n+1)+': no flight number');return}
+    let on=/dep/i.test(g('on'))?'dep':/arr|stay/i.test(g('on'))?'arr':'', ea=g('eta'), ed=g('etd');
+    const isOn=t=>/^o\/?n$|overnight/i.test(String(t).trim());
+    if(isOn(ea)){ea='';on='dep'} if(isOn(ed)){ed='';on='arr'}
+    const eta=normTime(ea), etd=normTime(ed);
+    if(eta===null||etd===null){bad.push(flight+': time not understood');return}
+    if(!eta&&!etd){bad.push(flight+': no ETA or ETD');return}
+    addFlight({ac:g('ac').toUpperCase().trim(),flight,arrCat:eta?normCat(g('arrCat')):'',eta,etd,depCat:etd?normCat(g('depCat')):'',on});added++});
+  save();renderSched();
+  toast(added+' flight'+(added===1?'':'s')+' added'+(bad.length?' · skipped '+bad.length+' ('+bad.slice(0,2).join('; ')+(bad.length>2?'…':'')+')':''),bad.length?7000:3000);
+  return added;
+}
+
+/* ---------- schedule page ---------- */
+function opts(list,val,blankLabel){return (blankLabel!=null?`<option value="">${esc(blankLabel)}</option>`:'')+list.map(o=>{const v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;return `<option value="${esc(v)}"${v===val?' selected':''}>${esc(l)}</option>`}).join('')}
+function renderSched(){
+  const acs=R().ac.map(a=>a[0]), sts=R().stands.map(s=>s[0]);
+  $('#schBody').innerHTML=S.flights.map(f=>`<tr data-id="${f.id}">
+    <td class="w-s"><select data-k="ac">${opts(f.ac&&!acs.includes(f.ac)?acs.concat([f.ac]):acs,f.ac,'—')}</select></td>
+    <td class="w-m"><input type="text" data-k="flight" value="${esc(f.flight)}" placeholder="JS 204" style="text-transform:uppercase"></td>
+    <td class="w-s"><select data-k="arrCat">${opts(['Int','Dom'],f.arrCat,'—')}</select></td>
+    <td class="w-t"><input type="time" data-k="eta" value="${esc(f.eta)}"></td>
+    <td class="w-t"><input type="time" data-k="etd" value="${esc(f.etd)}"></td>
+    <td class="w-s"><select data-k="depCat">${opts(['Int','Dom'],f.depCat,'—')}</select></td>
+    <td class="w-m"><select data-k="on">${opts([['dep','Here O/N, departs'],['arr','Arrives, stays O/N']],f.on,'No')}</select></td>
+    <td class="w-m"><select data-k="stand">${opts(sts,f.stand,'—')}</select></td>
+    <td class="w-m"><select data-k="alt">${opts(sts,f.alt,'—')}</select></td>
+    <td class="chk-cell" data-chk></td>
+    <td><button class="btn sm ghost" data-del title="Remove this flight">×</button></td></tr>`).join('');
+  $('#schEmpty').style.display=S.flights.length?'none':'';
+  refreshSched();
+}
+function refreshSched(){
+  const iss=standIssues(); let bad=0;
+  $$('#schBody tr').forEach(tr=>{const m=iss[tr.dataset.id]; tr.classList.toggle('flag',!!m); if(m)bad++;
+    tr.querySelector('[data-chk]').innerHTML=m?`<span class="tag bad" title="${esc(m.join(' · '))}">${esc(m[0])}${m.length>1?' +'+(m.length-1):''}</span>`:'<span class="tag ok">OK</span>'});
+  $('#pillSch').textContent=S.flights.length?(bad?bad+' to fix':S.flights.length+' OK'):'0';
+  $('#pillCon').textContent=S.flights.length?String(compute().log.length):'–';
+}
+function addFlight(d){S.flights.push(Object.assign({id:'f'+(S.seq++),ac:'',flight:'',arrCat:'',eta:'',etd:'',depCat:'',on:'',stand:'',alt:'',ov:{}},d||{}))}
+function initSched(){
+  $$('[data-b]').forEach(el=>{el.value=S[el.dataset.b]??'';el.addEventListener('input',()=>{S[el.dataset.b]=el.value;save();updateHeader();updateGaPill()})});
+  const body=$('#schBody');
+  body.addEventListener('change',e=>{const el=e.target;if(!el.dataset.k)return;const f=S.flights.find(x=>x.id===el.closest('tr').dataset.id);if(!f)return;
+    let v=el.value; if(el.dataset.k==='flight'){v=v.toUpperCase().trim();el.value=v} f[el.dataset.k]=v;
+    save();refreshSched()});
+  body.addEventListener('click',e=>{if(!e.target.closest('[data-del]'))return;const id=e.target.closest('tr').dataset.id;S.flights=S.flights.filter(x=>x.id!==id);save();renderSched()});
+  $('#btnAdd').addEventListener('click',()=>{addFlight();save();renderSched();const r=$('#schBody tr:last-child select');if(r)r.focus()});
+  $('#btnSuggest').addEventListener('click',()=>{if(!S.flights.length){toast('Add flights first, or load the sample day');return}suggestStands()});
+  $('#btnClearStands').addEventListener('click',()=>{S.flights.forEach(f=>{f.stand='';f.alt=''});save();renderSched();toast('Stands cleared')});
+  $('#btnClearDay').addEventListener('click',()=>{if(!S.flights.length)return;if(!armed(this_clear))return;S.flights=[];save();renderSched();toast('Day cleared')});
+}
+/* two-press guard instead of a browser dialog */
+const this_clear={};
+function armed(o){if(o.t&&Date.now()-o.t<4000){o.t=0;return true}o.t=Date.now();toast('Press again within 4 seconds to confirm',4000);return false}
+
+/* ---------- counters page ---------- */
+function renderCounters(){
+  const {list,log}=compute();
+  const box=(r,k)=>r.dep?`<input type="text" data-ov="${k}" class="${r.man[k]?'man':''}" value="${esc(r[k])}" placeholder="—" title="${r.man[k]?'Your change. Clear the box to go back to automatic.':'Automatic. Type to change.'}">`:(k==='main'&&isCargo(r.f)?'Cargo':'—');
+  $('#conBody').innerHTML=list.length?list.map(r=>{const f=r.f, gates=(r.dom?GATES_DOM:GATES_INT).concat(r.dom?GATES_INT:GATES_DOM);
+    return `<tr data-id="${f.id}"><td>${esc(f.ac||'—')}</td><td><b>${esc(f.flight||'—')}</b></td><td class="c">${fmt(r.open)||'—'}</td><td class="c">${esc(f.eta||(f.on==='dep'?'O/N':'—'))}</td><td class="c">${fmt(r.close)||'—'}</td><td class="c">${esc(f.etd||(f.on==='arr'?'O/N':'—'))}</td>
+    <td class="w-c">${box(r,'main')}</td><td class="w-c">${box(r,'second')}</td><td class="w-c">${box(r,'alt')}</td>
+    <td class="w-g">${r.dep?`<select data-ov="gate" class="${r.man.gate?'man':''}">${opts(gates,r.gate,'—')}</select>`:'—'}</td><td class="c">${esc(r.belt||'—')}</td></tr>`}).join(''):'<tr><td colspan="11" class="hint">No flights on the schedule yet.</td></tr>';
+  $('#conLog').innerHTML=log.length?`<div class="notice warn"><ul class="issues">${log.map(l=>`<li><b>${esc(l[0].flight||'Flight')}</b>: ${esc(l[1])}</li>`).join('')}</ul></div>`:'<div class="notice ok">No counter, gate or belt conflicts.</div>';
+  $('#pillCon').textContent=S.flights.length?String(log.length):'–';
+}
+function initCounters(){
+  $('#conBody').addEventListener('change',e=>{const el=e.target,k=el.dataset.ov;if(!k)return;const id=el.closest('tr').dataset.id,f=S.flights.find(x=>x.id===id);if(!f)return;
+    f.ov=f.ov||{}; const v=el.value.trim(); if(v)f.ov[k]=v; else delete f.ov[k]; save();
+    setTimeout(()=>{const a=document.activeElement, keep=a&&a.dataset&&a.dataset.ov?[a.closest('tr').dataset.id,a.dataset.ov]:null; renderCounters();
+      if(keep){const n=document.querySelector(`#conBody tr[data-id="${keep[0]}"] [data-ov="${keep[1]}"]`);if(n)n.focus()}},0)});
+  const g={};$('#ovReset').addEventListener('click',()=>{if(!S.flights.some(f=>f.ov&&Object.keys(f.ov).length)){toast('Nothing has been changed by hand');return}if(!armed(g))return;S.flights.forEach(f=>f.ov={});save();renderCounters();toast('Back to automatic')});
+}
+
+/* ---------- dashboard ---------- */
+function nowMin(){const v=toMin(S.now);if(v!=null)return v;const d=new Date();return d.getHours()*60+d.getMinutes()}
+function renderDash(){
+  const now=nowMin(); $('#nowIn').value=fmt(now);
+  $('#dashMeta').textContent='Eff. date '+(S.date?S.date.split('-').reverse().join('.'):'—')+(S.updatedBy?' · Updated by '+S.updatedBy:'');
+  const F=S.flights, deps=F.filter(f=>toMin(f.etd)!=null), arrs=F.filter(f=>toMin(f.eta)!=null);
+  const tile=(n,l,s)=>`<div class="stat"><b>${n}</b><span>${esc(l)}${s?'<br>'+esc(s):''}</span></div>`;
+  $('#tiles').innerHTML=tile(F.length,'Flights today')+tile(deps.length,'Departures',deps.filter(f=>toMin(f.etd)>now).length+' still to go')
+    +tile(arrs.length,'Arrivals',arrs.filter(f=>toMin(f.eta)>now).length+' still to come')+tile(deps.filter(f=>f.depCat!=='Dom').length,'International deps','Domestic: '+deps.filter(f=>f.depCat==='Dom').length)
+    +tile(F.filter(isCargo).length,'Cargo flights')+tile(F.filter(f=>f.on).length,'Overnight (O/N)');
+  const rows=R().stands.map(s=>{const here=F.filter(f=>f.stand===s[0]&&win(f));
+    const on=here.find(f=>{const w=win(f);return w[0]<=now&&now<w[1]}); const nx=here.filter(f=>win(f)[0]>now).sort((a,b)=>sortKey(a)-sortKey(b))[0];
+    return {s:s[0],on,nx}});
+  $('#standBody').innerHTML=rows.map(r=>`<tr><td><b>${esc(r.s)}</b></td><td>${r.on?esc(r.on.flight||'—')+' · until '+fmt(win(r.on)[1]):'<span class="tag ok">Free</span>'}</td><td>${r.nx?esc(r.nx.flight||'—'):'—'}</td><td>${r.nx?fmt(win(r.nx)[0]):'—'}</td></tr>`).join('');
+  const gaOn=gaToday();
+  $('#apron').innerHTML=rows.map(r=>`<div class="bay${r.on?' on':''}"><b>${esc(r.s)}</b><small>${r.on?'✈ '+esc(r.on.flight||'—')+' ('+esc(r.on.ac||'?')+')':'Free'}</small><small>${r.nx?'Next: '+esc(r.nx.flight||'—')+' at '+fmt(win(r.nx)[0]):'Next: none'}</small></div>`).join('')
+    +GA_SPOTS.map(g=>{const st=gaOn.find(x=>x.spot===g);return `<div class="bay ga${st?' on':''}"><b>${g}</b><small>${st?'✈ '+esc(st.reg||'GA aircraft'):'Free'}</small><small>${st?'Until '+esc((st.dep||'').split('-').reverse().join('.')||'TBA'):'GA parking'}</small></div>`}).join('');
+  const iss=standIssues(), {log}=compute(), items=[];
+  S.flights.forEach(f=>{if(iss[f.id])items.push('<li><b>'+esc(f.flight||'Flight')+'</b>: '+esc(iss[f.id].join(' · '))+'</li>')});
+  log.forEach(l=>items.push('<li><b>'+esc(l[0].flight||'Flight')+'</b>: '+esc(l[1])+'</li>'));
+  gaIssues().list.forEach(m=>items.push('<li>'+esc(m)+'</li>'));
+  $('#dashIssues').innerHTML=items.length?`<div class="notice warn"><ul class="issues">${items.join('')}</ul></div>`:'<div class="notice ok">Nothing needs attention.</div>';
+}
+
+/* ---------- GA register ---------- */
+function gaToday(){return S.ga.filter(g=>g.arr&&g.arr<=S.date&&(!g.dep||g.dep>=S.date)&&g.status!=='Departed')}
+function gaIssues(){const by={},list=[];const add=(id,m)=>{(by[id]=by[id]||[]).push(m)};
+  S.ga.forEach(g=>{if(!g.arr)add(g.id,'Enter the arrival date');if(g.arr&&g.dep&&g.dep<g.arr)add(g.id,'Departure is before arrival');if(!g.spot)add(g.id,'No spot')});
+  for(let i=0;i<S.ga.length;i++)for(let j=i+1;j<S.ga.length;j++){const a=S.ga[i],b=S.ga[j];if(!a.spot||a.spot!==b.spot||!a.arr||!b.arr)continue;
+    const ae=a.dep||'9999',be=b.dep||'9999';if(a.arr<=be&&b.arr<=ae){add(a.id,'Same spot as '+(b.reg||'another stay'));add(b.id,'Same spot as '+(a.reg||'another stay'));list.push('GA spot '+a.spot+': '+(a.reg||'a stay')+' overlaps '+(b.reg||'another stay'))}}
+  return {by,list}}
+function nights(g){if(!g.arr||!g.dep)return '';const n=Math.round((new Date(g.dep+'T12:00:00')-new Date(g.arr+'T12:00:00'))/864e5);return n<0?'':n===0?'Same day':String(n)}
+function renderGa(){
+  $('#gaBody').innerHTML=S.ga.length?S.ga.map(g=>`<tr data-id="${g.id}">
+    <td class="w-m"><input type="text" data-k="reg" value="${esc(g.reg)}" style="text-transform:uppercase"></td>
+    <td class="w-m"><input type="text" data-k="type" value="${esc(g.type)}"></td>
+    <td><input type="text" data-k="op" value="${esc(g.op)}"></td>
+    <td class="w-d"><input type="date" data-k="arr" value="${esc(g.arr)}"></td>
+    <td class="w-d"><input type="date" data-k="dep" value="${esc(g.dep)}"></td>
+    <td class="w-s"><select data-k="spot">${opts(GA_SPOTS,g.spot,'—')}</select></td>
+    <td class="w-m"><select data-k="status">${opts(GA_STATUS,g.status)}</select></td>
+    <td data-n></td><td data-chk></td>
+    <td><button class="btn sm ghost" data-del title="Remove this stay">×</button></td></tr>`).join(''):'<tr><td colspan="10" class="hint">No stays recorded. Add a stay, or load the sample day.</td></tr>';
+  refreshGa();
+}
+function refreshGa(){const iss=gaIssues().by;
+  $$('#gaBody tr[data-id]').forEach(tr=>{const g=S.ga.find(x=>x.id===tr.dataset.id),m=iss[g.id];tr.classList.toggle('flag',!!m);
+    tr.querySelector('[data-n]').textContent=nights(g);
+    tr.querySelector('[data-chk]').innerHTML=m?`<span class="tag bad" title="${esc(m.join(' · '))}">${esc(m[0])}</span>`:'<span class="tag ok">OK</span>'});
+  updateGaPill();}
+function updateGaPill(){const n=gaToday().length;$('#pillGa').textContent=String(n);const c=$('#gaCount');if(c)c.textContent='On the ground on the effective date: '+n}
+function initGa(){
+  const body=$('#gaBody');
+  body.addEventListener('change',e=>{const el=e.target;if(!el.dataset.k)return;const g=S.ga.find(x=>x.id===el.closest('tr').dataset.id);if(!g)return;
+    let v=el.value;if(el.dataset.k==='reg'){v=v.toUpperCase().trim();el.value=v}g[el.dataset.k]=v;save();refreshGa()});
+  body.addEventListener('click',e=>{if(!e.target.closest('[data-del]'))return;const id=e.target.closest('tr').dataset.id;S.ga=S.ga.filter(x=>x.id!==id);save();renderGa()});
+  $('#gaAdd').addEventListener('click',()=>{S.ga.push({id:'g'+(S.seq++),reg:'',type:'',op:'',arr:S.date,dep:'',spot:'',status:'Provisional'});save();renderGa()});
+}
+
+/* ---------- rules ---------- */
+const NEWROW={ac:['','S',1,0,0],airlines:['','','Passenger',''],stands:['','M']};
+function renderRules(){
+  $$('[data-r]').forEach(el=>el.value=R()[el.dataset.r]);
+  $$('[data-list]').forEach(tb=>{const k=tb.dataset.list;
+    tb.innerHTML=R()[k].map((row,i)=>`<tr data-i="${i}">${row.map((v,j)=>{
+      if((k==='ac'||k==='stands')&&j===1)return `<td class="w-m"><select data-j="${j}">${opts(['S','M','L'],v)}</select></td>`;
+      if(k==='airlines'&&j===2)return `<td class="w-m"><select data-j="${j}">${opts(['Passenger','Cargo'],v)}</select></td>`;
+      if((k==='ac'&&j>=2)||(k==='airlines'&&j===3))return `<td class="w-m"><input type="number" min="0" data-j="${j}" value="${esc(v)}"></td>`;
+      return `<td><input type="text" data-j="${j}" value="${esc(v)}"></td>`}).join('')}<td><button class="btn sm ghost" data-delrow title="Remove">×</button></td></tr>`).join('')});
+}
+function initRules(){
+  $$('[data-r]').forEach(el=>el.addEventListener('change',()=>{const n=Number(el.value);R()[el.dataset.r]=isNaN(n)||n<0?0:n;save();refreshSched()}));
+  $$('[data-list]').forEach(tb=>{const k=tb.dataset.list;
+    tb.addEventListener('change',e=>{const el=e.target;if(el.dataset.j==null)return;const i=+el.closest('tr').dataset.i,j=+el.dataset.j;let v=el.value;
+      if(k==='ac'&&j===0||k==='airlines'&&j===0){v=v.toUpperCase().trim();el.value=v} if(k==='ac'&&j>=2)v=Number(v)||0; R()[k][i][j]=v;save();refreshSched()});
+    tb.addEventListener('click',e=>{if(!e.target.closest('[data-delrow]'))return;R()[k].splice(+e.target.closest('tr').dataset.i,1);save();renderRules();refreshSched()})});
+  $$('[data-addrow]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.addrow;R()[k].push(NEWROW[k].slice());save();renderRules();const inp=document.querySelector(`[data-list="${k}"] tr:last-child input`);if(inp)inp.focus()}));
+  const rs={};$('#rulesReset').addEventListener('click',()=>{if(!armed(rs))return;S.rules=defRules();save();renderRules();refreshSched();toast('Rules reset')});
+}
+
+/* ---------- sample day (all invented) ---------- */
+function loadSample(){
+  S.flights=[];S.ga=[];
+  [['DHC6','IH 101','','','07:30','Dom','dep'],['DHC6','IH 102','Dom','08:10','08:40','Dom',''],['AT76','KX 310','Int','08:45','09:35','Int',''],
+   ['E145','CW 520','Int','09:20','10:10','Int',''],['C208','TC 801','Int','10:05','10:35','Int',''],['B738','JS 204','Int','11:40','13:00','Int',''],
+   ['A320','CW 610','Int','12:15','13:30','Int',''],['DHC6','IH 105','Dom','12:40','13:05','Dom',''],['AT76','KX 314','Int','14:20','15:05','Int',''],
+   ['A333','JS 880','Int','15:10','17:10','Int',''],['E190','KX 420','Int','16:00','16:50','Int',''],['DHC6','IH 109','Dom','17:30','','','arr'],
+   ['AT45','KX 318','Int','19:15','','','arr']].forEach(a=>addFlight({ac:a[0],flight:a[1],arrCat:a[2],eta:a[3],etd:a[4],depCat:a[5],on:a[6]}));
+  const d=S.date||todayISO();
+  [['JX-ALF','Light jet','Skyline Handling',addDays(d,-1),addDays(d,2),'G1','On the ground'],['JX-BRV','Turboprop','Skyline Handling',d,d,'G2','Confirmed'],
+   ['JX-CHL','Midsize jet','Harbour Aviation',addDays(d,1),addDays(d,6),'G1','Provisional'],['JX-DLT','Light jet','Harbour Aviation',addDays(d,3),addDays(d,5),'G3','Provisional']]
+   .forEach(a=>S.ga.push({id:'g'+(S.seq++),reg:a[0],type:a[1],op:a[2],arr:a[3],dep:a[4],spot:a[5],status:a[6]}));
+  if(!S.updatedBy)S.updatedBy='Duty Officer'; $('[data-b=updatedBy]').value=S.updatedBy;
+  save();render(cur);toast('Sample day loaded. Every flight and aircraft is invented. Press “Suggest stands”.',5000);
+}
+
+/* ---------- navigation ---------- */
+const PAGES=['sched','counters','dash','ga','rules']; let cur='sched';
+const RENDER={sched:renderSched,counters:renderCounters,dash:renderDash,ga:renderGa,rules:renderRules};
+function render(p){RENDER[p]();updateGaPill()}
+function updateHeader(){$('#hdrSub').textContent=S.date?longDate(S.date)+' · JSR International Airport':'JSR International Airport · Operations'}
+function go(p){cur=p;$$('section.page').forEach(s=>s.classList.toggle('on',s.id==='p-'+p));$$('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.p===p));
+  render(p);window.scrollTo({top:0});const i=PAGES.indexOf(p);$('#bPrev').style.visibility=i?'visible':'hidden';$('#bNext').style.visibility=i<PAGES.length-1?'visible':'hidden'}
+function init(){
+  initSched();initCounters();initGa();initRules();updateHeader();
+  $$('.tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.p)));
+  $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+  $('#bPrev').addEventListener('click',()=>{const i=PAGES.indexOf(cur);if(i>0)go(PAGES[i-1])});
+  $('#bNext').addEventListener('click',()=>{const i=PAGES.indexOf(cur);if(i<PAGES.length-1)go(PAGES[i+1])});
+  const ss={};$('#btnSample').addEventListener('click',()=>{if((S.flights.length||S.ga.length)&&!armed(ss))return;loadSample()});
+  $('#btnPrint').addEventListener('click',()=>window.print());
+  $('#btnPaste').addEventListener('click',()=>{const t=$('#pasteBox');if(importText(t.value))t.value=''});
+  $('#btnCsv').addEventListener('click',()=>$('#csvIn').click());
+  $('#csvIn').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{importText(await f.text())}catch(err){toast('Could not read that file',5000)}e.target.value=''});
+  $('#nowIn').addEventListener('change',e=>{S.now=e.target.value;save();renderDash()});
+  $('#nowBtn').addEventListener('click',()=>{S.now='';save();renderDash()});
+  go('sched');
+}
+document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body>
+</html>
