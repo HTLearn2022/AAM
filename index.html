@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b254b">
-<meta name="description" content="Airport Airside Manager — fictional JSR International Airport interactive demonstration.">
-<title>Airport Airside Manager — JIA Operations Hub</title>
+<meta name="description" content="Airport Airside Manager (AAM) by JSR Communications: an integrated airport operations platform for flight assignments, inspections, issues, permits and departmental coordination. Explore the fictional JIA demonstration.">
+<title>Airport Airside Manager (AAM) | Airport Operations Platform</title>
 <style>
 :root{--navy:#0b254b;--navy2:#103b77;--blue:#1d6fd6;--yellow:#f2c400;--green:#177847;--paper:#f3f6fb;--ink:#182640;--muted:#5f6f84;--line:#dfe6ef;--white:#fff;--danger:#b42318;--warn:#b65c00}
 *{box-sizing:border-box}html{scroll-behaviour:smooth}body{margin:0;color:var(--ink);background:var(--paper);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}a{color:inherit}button,input{font:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #62a4ff;outline-offset:3px}.wrap{max-width:1360px;margin:auto;display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
@@ -50,7 +50,7 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 <div class="wrap">
 <aside aria-label="Demonstration navigation">
   <div class="brand"><div class="mark" aria-hidden="true">AAM</div><div><h1>Airport Airside<br>Manager</h1><p>JSR Communications</p></div></div>
-  <div><div class="menu-heading">JIA demonstration</div><nav class="menu" aria-label="Modules">
+  <div><div class="menu-heading">JIA · interactive demonstration</div><nav class="menu" aria-label="Modules">
     <a class="current" href="index.html" aria-current="page"><span class="sym">▦</span> Operations Hub</a>
     <a href="assignments.html"><span class="sym">✈</span> Stand & Counter Assignments</a>
     <a href="airfield-inspection.html"><span class="sym">✓</span> Airfield Inspection</a>
@@ -60,7 +60,7 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
 </aside>
 <main>
   <div class="topline"><span class="crumb">Operations Hub / Overview</span><span class="demo-tag">Fictional airport · Demonstration</span></div>
-  <section class="hero" aria-label="Airport overview"><div class="eyebrow">JIA / JSR International Airport</div><h2>One view of the day's operations.</h2><p>Explore how airport teams can prepare resource assignments, review an apron plan and complete airfield or terminal inspections — in a single demonstration environment.</p><div class="hero-btm"><a class="btn yellow" href="assignments.html">Open daily assignments <span aria-hidden="true">›</span></a><a class="btn ghost" href="#modules">Explore modules</a></div></section>
+  <section class="hero" aria-label="Airport Airside Manager product overview"><div class="eyebrow">Airport Airside Manager · JSR Communications</div><h2>One connected hub for airport operations.</h2><p>AAM is being developed to bring daily flight and resource assignments, inspections, issue reporting, permits and NOTAM requests into a coordinated, role-based airport operations platform. Explore selected working workflows below using the fictional JSR International Airport (JIA).</p><div class="hero-btm"><a class="btn yellow" href="assignments.html">Open daily assignments <span aria-hidden="true">›</span></a><a class="btn ghost" href="#modules">Explore modules</a></div></section>
   <div class="section-head"><h3>Operations at a glance</h3><small id="dataLabel" aria-live="polite">Illustrative sample activity</small></div>
   <section class="metrics" aria-label="Operational summary">
     <article class="metric"><small>Flight movements</small><strong id="flightCount">13</strong><span id="flightHint">Illustrative daily schedule</span></article>
@@ -100,15 +100,24 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
     <div class="panel"><div class="panel-h"><h3>Apron occupancy preview</h3><small>Calculated from sample movement times</small></div><div class="apron" id="standGrid" aria-live="polite"></div><div class="note">Indicative stand use from ETA/ETD windows. Not a live aircraft position feed or an operational clearance.</div></div>
   </section>
 
-  <div class="section-head" id="modules"><h3>Demonstration modules</h3><small>Available now · Separate browser-based applications</small></div>
+  <div class="section-head" id="modules"><h3>Explore the current JIA demonstration</h3><small>Working examples of selected AAM modules · fictional data</small></div>
   <section class="modules" aria-label="Available modules">
     <article class="module"><div class="symbol" aria-hidden="true">✈</div><h4>Daily assignments</h4><p>Load an invented flight schedule, suggest stands, adjust check-in counters and gates, print a plan and review GA parking.</p><a href="assignments.html">Open assignments →</a></article>
     <article class="module"><div class="symbol" aria-hidden="true">✓</div><h4>Airfield inspection</h4><p>Complete day and night checklists, enter runway condition information and preview or download an inspection PDF.</p><a href="airfield-inspection.html">Open airfield log →</a></article>
     <article class="module"><div class="symbol" aria-hidden="true">▤</div><h4>Terminal inspection</h4><p>Work through terminal checklists, capture observations and prepare a printable inspection record.</p><a href="terminal-inspection.html">Open terminal log →</a></article>
   </section>
+  <div class="section-head"><h3>The wider AAM platform</h3><small>Planned connected workflows · not yet functional in this public demonstration</small></div>
+  <section class="modules" aria-label="Planned AAM platform capabilities">
+    <article class="module"><div class="symbol" aria-hidden="true">!</div><h4>Issues &amp; defects</h4><p>Report, assign, track, remind, escalate and sign off defects, including issues arising from inspections.</p><span class="pill">In development</span></article>
+    <article class="module"><div class="symbol" aria-hidden="true">▣</div><h4>Permits &amp; approvals</h4><p>Support requests, conditions, approvals and close-out for hot works and other airport-specific permits.</p><span class="pill">In development</span></article>
+    <article class="module"><div class="symbol" aria-hidden="true">✉</div><h4>NOTAM requests</h4><p>Prepare and route requests to authorised staff and AIS; the software does not itself issue official NOTAMs.</p><span class="pill">In development</span></article>
+    <article class="module"><div class="symbol" aria-hidden="true">▤</div><h4>Airline private workspace</h4><p>Maintain internal working schedules with private rows, notes and printing, separate from requests sent to Airport Operations.</p><span class="pill">In development</span></article>
+    <article class="module"><div class="symbol" aria-hidden="true">♙</div><h4>Role-based departmental access</h4><p>Tailored views for Operations, airlines, handlers, Maintenance, ATC, managers and other authorised users.</p><span class="pill">In development</span></article>
+    <article class="module"><div class="symbol" aria-hidden="true">▦</div><h4>Shared airport records</h4><p>Bring operational dashboards, follow-ups, approvals, audit trails and airport-specific configurations together.</p><span class="pill">In development</span></article>
+  </section>
   <div class="section-head"><h3>Suggested five-minute walkthrough</h3></div>
   <section class="workflow" aria-label="Demonstration workflow"><article class="step"><span>01 · ASSIGN</span><strong>Load sample flights</strong><p>Open Daily Assignments, choose “Load sample day”, then “Suggest stands”.</p></article><article class="step"><span>02 · REVIEW</span><strong>Check the apron</strong><p>Return here to inspect saved sample assignments at different times of day.</p></article><article class="step"><span>03 · INSPECT</span><strong>Complete a checklist</strong><p>Open either inspection log, try the controls and preview a PDF report.</p></article></section>
-  <footer class="footer"><span>Airport Airside Manager (AAM) · A JSR Communications demonstration</span><span>Not for operational decision-making · No live data · No shared user accounts</span></footer>
+  <footer class="footer"><span>Airport Airside Manager (AAM) · Developed by JSR Communications · JIA demonstration</span><span>Not for operational decision-making · No live data · No shared user accounts</span></footer>
 </main>
 </div>
 <script>
