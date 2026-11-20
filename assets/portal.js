@@ -184,3 +184,67 @@ function renderGa(){
  $('gaForm').style.display=can('ga:edit')?'grid':'none';
  $('gaSpotSelect').innerHTML=Array.from({length:9},function(_,i){return '<option>G'+(i+1)+'</option>'}).join('');
 }
+
+function isOverdue(x){return x.status!=='Closed'&&x.due&&new Date(x.due).getTime()<Date.now()}
+function renderIssues(){
+ $('issueRows').innerHTML=data.issues.map(function(x){
+  var buttons=[];
+  if(can('issues:assign')&&x.status==='Open')buttons.push('<select aria-label="Issue owner" data-owner="'+safe(x.id)+'">'+['Maintenance','Airport Operations','Safety','Ground Handling','Terminal Operations'].map(function(y){return '<option'+(x.owner===y?' selected':'')+'>'+safe(y)+'</option>'}).join('')+'</select> <button class="btn" data-act="owner" data-id="'+safe(x.id)+'">Assign</button>');
+  if(x.status==='Open'&&(can('issues:assign')||can('issues:resolve')&&(x.owner===user.role||x.owner==='Safety'&&user.role==='Safety')))buttons.push('<button class="btn" data-act="resolve" data-id="'+safe(x.id)+'">Mark resolved</button>');
+  if(x.status==='Resolved'&&can('issues:assign'))buttons.push('<button class="btn primary" data-act="signoff" data-id="'+safe(x.id)+'">Sign off</button>');
+  return '<article class="record"><h4>'+safe(x.id)+' · '+safe(x.location)+' '+statusTag(isOverdue(x)?'Overdue':x.status)+'</h4><p>'+safe(x.description)+'</p><small>'+safe(x.category)+' · '+safe(x.severity)+' · Assigned to '+safe(x.owner||'Unassigned')+' · Due '+safe(x.due||'Not set')+(x.inspection?' · Related inspection: '+safe(x.inspection):'')+'</small><div class="actions">'+buttons.join('')+'</div></article>';
+ }).join('')||'<p class="empty">No issues.</p>';
+ $('issueForm').style.display=can('issues:report')?'grid':'none';
+}
+function renderInspections(){
+ $('inspectionRows').innerHTML='<div class="cards">'+data.inspections.map(function(i){return '<article class="record"><h4>'+safe(i.id)+' · '+safe(i.type)+' · '+statusTag(i.result)+'</h4><p>'+safe(i.item)+' · '+safe(i.location)+'</p><small>'+safe(i.remarks||'No remarks')+' · '+safe(i.date)+'</small></article>'}).join('')+'</div>';
+ $('inspectionForm').style.display=can('inspections:record')?'grid':'none';
+ var type=$('inspectionType').value;
+ $('inspectionItem').innerHTML=(type==='Terminal'?['Public concourse','Baggage claim area','Emergency exits','Fire safety equipment','Lighting and signage']:['Runway surface','Taxiway lights','Apron pavement','FOD inspection','Perimeter fencing','Runway markings']).map(function(x){return '<option>'+safe(x)+'</option>'}).join('');
+}
+function renderPermits(){
+ $('permitRows').innerHTML=data.permits.map(function(p){
+  var actions=[];
+  if(p.status==='Requested'&&can('permits:approve'))actions.push('<button class="btn primary" data-act="permit-approve" data-id="'+safe(p.id)+'">Approve</button><button class="btn danger" data-act="permit-reject" data-id="'+safe(p.id)+'">Reject</button>');
+  if(p.status==='Approved'&&can('permits:close'))actions.push('<button class="btn" data-act="permit-active" data-id="'+safe(p.id)+'">Activate</button>');
+  if(p.status==='Active'&&can('permits:close'))actions.push('<button class="btn" data-act="permit-close" data-id="'+safe(p.id)+'">Close out</button>');
+  return '<article class="record"><h4>'+safe(p.id)+' · '+safe(p.type)+' '+statusTag(p.status)+'</h4><p>'+safe(p.location)+' — '+safe(p.scope)+'</p><small>Team: '+safe(p.team)+' · Ends: '+safe(p.end||'Not specified')+'</small><div class="actions">'+actions.join('')+'</div></article>';
+ }).join('')||'<p class="empty">No permit requests.</p>';
+ $('permitForm').style.display=can('permits:request')?'grid':'none';
+}
+function renderNotams(){
+ var records=data.notams.filter(function(n){return can('notams:review')||can('notams:file')||can('notams:ack')||admin()||n.by===user.id||n.status==='AIS Filed (simulated)'||n.status==='ATC Acknowledged (simulated)'});
+ $('notamRows').innerHTML=records.map(function(n){
+  var actions=[];
+  if(n.status==='Awaiting Operations review'&&can('notams:review'))actions.push('<button class="btn primary" data-act="notam-review" data-id="'+safe(n.id)+'">Review / send to AIS (simulation)</button>');
+  if(n.status==='Reviewed for AIS'&&can('notams:file'))actions.push('<button class="btn primary" data-act="notam-file" data-id="'+safe(n.id)+'">Simulate AIS filing</button>');
+  if(n.status==='AIS Filed (simulated)'&&can('notams:ack'))actions.push('<button class="btn" data-act="notam-ack" data-id="'+safe(n.id)+'">ATC acknowledges</button>');
+  return '<article class="record"><h4>'+safe(n.id)+' · '+safe(n.subject)+' '+statusTag(n.status)+'</h4><p>'+safe(n.location)+' — '+safe(n.text)+'</p><small>From '+safe(n.start||'Unspecified')+' UTC · To '+safe(n.end||'Unspecified')+' UTC'+(n.reference?' · Reference '+safe(n.reference):'')+'</small><div class="actions">'+actions.join('')+'</div></article>';
+ }).join('')||'<p class="empty">No visible notices or requests.</p>';
+ $('notamForm').style.display=can('notams:request')?'grid':'none';
+}
+function renderReports(){
+ var buttons=[['flights','Flight schedule CSV','flights:view'],['issues','Issue register CSV','issues:view'],['permits','Permit register CSV','permits:view'],['notams','NOTAM request CSV','notams:view'],['audit','Activity log CSV','reports:view']];
+ $('reportButtons').innerHTML=buttons.filter(function(a){return can(a[2])}).map(function(x){return '<button type="button" class="btn" data-act="export" data-kind="'+x[0]+'">'+x[1]+'</button>'}).join('');
+ $('auditRows').innerHTML=data.audit.slice(0,30).map(function(a){return '<div class="audit">'+safe(a.at)+' · '+safe(a.actor)+' — '+safe(a.event)+'</div>'}).join('')||'<p class="empty">No recorded activity.</p>';
+}
+function renderAdmin(){
+ var roles=data.roles.map(function(r){return '<option>'+safe(r.name)+'</option>'}).join('');
+ var picker=$('roleEditor'),old=picker.value;picker.innerHTML=roles;if(data.roles.some(function(r){return r.name===old}))picker.value=old;else picker.value='Airport Operations';
+ var selected=data.roles.find(function(r){return r.name===picker.value})||data.roles[0];
+ $('permissionEditor').innerHTML=PERMISSIONS.map(function(p){return '<label><input type="checkbox" value="'+safe(p[0])+'"'+(selected.perms.indexOf(p[0])>=0?' checked':'')+(selected.name==='System Administrator'?' disabled':'')+'>'+safe(p[1])+'</label>'}).join('');
+ $('saveRole').disabled=selected.name==='System Administrator';
+ var newRole=$('newUserRole'),prev=newRole.value;newRole.innerHTML=roles;if(data.roles.some(function(r){return r.name===prev}))newRole.value=prev;
+ var orgs=$('newUserOrg'),oldOrg=orgs.value;orgs.innerHTML=data.orgs.map(function(o){return '<option value="'+safe(o.id)+'">'+safe(o.name)+' ('+safe(o.type)+')</option>'}).join('');if(data.orgs.some(function(o){return o.id===oldOrg}))orgs.value=oldOrg;
+ $('userRows').innerHTML=data.users.map(function(u){
+  var roleOptions=data.roles.map(function(r){return '<option'+(r.name===u.role?' selected':'')+'>'+safe(r.name)+'</option>'}).join('');
+  return '<tr><td><b>'+safe(u.name)+'</b><small>'+safe(u.id)+'</small></td><td><select aria-label="Account type" data-user-role="'+safe(u.id)+'">'+roleOptions+'</select></td><td>'+safe(orgName(u.org))+'</td><td>'+statusTag(u.active?'Active':'Deactivated')+'</td><td><button class="btn" data-act="user-role" data-id="'+safe(u.id)+'">Save role</button> <button class="btn'+(u.active?' danger':'')+'" data-act="user-active" data-id="'+safe(u.id)+'"'+(u.id===user.id?' disabled':'')+'>'+(u.active?'Deactivate':'Reactivate')+'</button></td></tr>';
+ }).join('');
+}
+function csvEscape(x){return '"'+String(x==null?'':x).replace(/"/g,'""')+'"'}
+function exportCSV(kind){
+ var rows=data[kind]||[],cols=kind==='flights'?['number','date','org','aircraft','category','sta','std','eta','etd','status','stand']:kind==='issues'?['id','location','category','severity','description','owner','status','due']:kind==='permits'?['id','type','location','team','scope','status','end']:kind==='notams'?['id','subject','location','text','start','end','status','reference']:['at','actor','event'];
+ if(kind==='flights'&&isAirline())rows=rows.filter(function(x){return x.org===user.org});
+ var str=[cols.join(',')].concat(rows.map(function(x){return cols.map(function(c){return csvEscape(x[c])}).join(',')})).join('\r\n');
+ var blob=new Blob([str],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='JIA demo '+kind+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1500);
+}
