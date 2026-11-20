@@ -116,3 +116,71 @@ function render(){if(!user)return;var current=data.users.find(function(u){return
 function showLogin(){$('loginOverlay').hidden=false;var opts=data.users.filter(function(u){return u.active}).map(function(u){return '<option value="'+safe(u.id)+'">'+safe(u.name)+' · '+safe(u.role)+' ('+safe(orgName(u.org))+')</option>'});$('loginChoice').innerHTML=opts.join('');if(user)$('loginChoice').value=user.id}
 function openAccount(){var x=data.users.find(function(u){return u.id===$('loginChoice').value&&u.active});if(!x)return notify('Please select a fictional account.');user=x;try{sessionStorage.setItem(SESSION,user.id)}catch(e){}$('loginOverlay').hidden=true;if(!allowedPage(page))page='dashboard';selectPage(page)}
 function printPrivate(){window.print()}
+
+function renderDashboard(){
+ $('operatingDate').value=data.date;
+ var flights=filteredFlights(),accepted=flights.filter(function(f){return f.status==='Accepted'});
+ var allIssues=data.issues.filter(function(x){return x.status!=='Closed'});
+ var overdue=allIssues.filter(function(x){return x.due&&new Date(x.due).getTime()<Date.now()});
+ var permits=data.permits.filter(function(x){return x.status==='Approved'||x.status==='Active'});
+ var activeNotams=data.notams.filter(function(x){return x.status==='AIS Filed (simulated)'||x.status==='ATC Acknowledged (simulated)'});
+ var metrics=[['Accepted flights',accepted.length,'For '+data.date],['Open defects',can('issues:view')?allIssues.length:'—','Overdue: '+overdue.length],['Active permits',can('permits:view')?permits.length:'—','Fictional approvals'],['NOTAMs simulated in force',can('notams:view')?activeNotams.length:'—','Not official notices']];
+ $('dashboardMetrics').innerHTML=metrics.map(function(m){return '<article class="metric"><span>'+safe(m[0])+'</span><strong>'+safe(m[1])+'</strong><small>'+safe(m[2])+'</small></article>'}).join('');
+ $('dashboardFlights').innerHTML='<div class="table-wrap"><table><thead><tr><th>Flight</th><th>ETA/ETD</th><th>Stand</th><th>Status</th></tr></thead><tbody>'+accepted.sort(function(a,b){return a.eta.localeCompare(b.eta)}).map(function(f){return '<tr><td><b>'+safe(f.number)+'</b><small>'+safe(orgName(f.org))+'</small></td><td>'+safe(f.eta||'—')+' / '+safe(f.etd||'—')+'</td><td>'+safe(f.stand||'Unassigned')+'</td><td>'+statusTag(f.status)+'</td></tr>'}).join('')+'</tbody></table></div>';
+ var handovers=[];
+ if(can('issues:view'))handovers.push('<b>Open defects:</b> '+allIssues.length+' ('+overdue.length+' overdue)');
+ if(can('permits:view'))handovers.push('<b>Permits active:</b> '+permits.length);
+ if(can('notams:view'))handovers.push('<b>Simulated filed NOTAMs:</b> '+activeNotams.length);
+ if(can('flights:approve'))handovers.push('<b>Requests awaiting Ops:</b> '+flights.filter(function(f){return f.status==='Pending'}).length);
+ $('dashboardWork').innerHTML=handovers.length?handovers.map(function(m){return '<p class="record">'+m+'</p>'}).join(''):'<p class="empty">No further departmental handovers visible for this role.</p>';
+ renderMap();
+}
+function renderMap(){
+ var pins=$('mapPins'),time=$('viewTime').value||'12:30';
+ pins.replaceChildren();
+ var accepted=data.flights.filter(function(f){return f.date===data.date&&f.status==='Accepted'&&(!isAirline()||f.org===user.org)});
+ MAP.forEach(function(entry){
+   var key=entry[0],related=accepted.filter(function(f){return f.stand===key});
+   var occupied=related.filter(function(f){return activeOnStand(f,time)});
+   var clash=false;for(var i=0;i<related.length;i++)for(var j=i+1;j<related.length;j++)if(overlaps(related[i],related[j]))clash=true;
+   var stays=data.ga.filter(function(g){return g.spot===key&&g.start<=data.date&&g.end>=data.date&&g.status!=='Departed'});
+   var state=clash||stays.length>1?'clash':occupied.length||stays.some(function(g){return g.status==='On stand'})?'busy':'free';
+   var b=document.createElement('button');b.type='button';b.className='map-pin '+(state==='busy'?'busy':state==='clash'?'clash':'');
+   b.style.left=entry[1]+'%';b.style.top=entry[2]+'%';b.title=key+' — '+state;b.setAttribute('aria-label',key+' '+state);
+   b.setAttribute('aria-pressed',String(key===selectedStand));b.textContent=state==='clash'?'!':occupied.length?occupied[0].number:stays.length?stays[0].registration:'✓';
+   b.addEventListener('click',function(){selectedStand=key;renderMap()});pins.append(b);
+   if(key===selectedStand){
+    var bits=[key+' · '+(clash?'CONFLICT':occupied.length?'OCCUPIED':stays.length?'RESERVED / GA':'AVAILABLE')];
+    occupied.forEach(function(f){bits.push(f.number+' ('+f.aircraft+') · '+f.eta+'–'+f.etd)});
+    related.filter(function(f){return !activeOnStand(f,time)}).forEach(function(f){bits.push('Other assignment: '+f.number+' '+f.eta+'–'+f.etd)});
+    stays.forEach(function(g){bits.push(g.registration+' · '+g.status+' · '+g.start+' to '+g.end)});
+    if(bits.length===1)bits.push('No recorded assignment at the selected time.');
+    $('mapDetail').textContent=bits.join('\n');
+   }
+ });
+}
+function renderFlights(){
+ var rows=filteredFlights().slice().sort(function(a,b){return (a.sta||'').localeCompare(b.sta||'')});
+ var options=STANDS.map(function(st){return '<option value="'+safe(st)+'">'+safe(st)+'</option>'}).join('');
+ $('flightRows').innerHTML=rows.map(function(f){
+  var controls=[];
+  if(can('flights:approve')&&f.status==='Pending')controls.push('<button class="btn primary" data-act="accept" data-id="'+safe(f.id)+'">Accept</button> <button class="btn danger" data-act="reject" data-id="'+safe(f.id)+'">Reject</button>');
+  if(can('flights:assign')&&f.status==='Accepted')controls.push('<select aria-label="Parking stand" data-stand="'+safe(f.id)+'"><option value="">Unassigned</option>'+options+'</select> <button class="btn" data-act="assign" data-id="'+safe(f.id)+'">Assign</button>');
+  if(can('flights:update')&&(f.status==='Accepted'||f.status==='Pending')&&(!isAirline()||f.org===user.org))controls.push('<div style="display:flex;gap:4px;flex-wrap:wrap"><input aria-label="ETA" type="time" data-eta="'+safe(f.id)+'" value="'+safe(f.eta)+'" style="max-width:100px"> <input aria-label="ETD" type="time" data-etd="'+safe(f.id)+'" value="'+safe(f.etd)+'" style="max-width:100px"> <button class="btn" data-act="times" data-id="'+safe(f.id)+'">Save estimates</button></div>');
+  return '<tr><td><b>'+safe(f.number)+'</b><small>'+safe(orgName(f.org))+'</small></td><td>'+safe(f.category)+'<small>'+safe(f.aircraft)+'</small></td><td>'+safe(f.sta)+' / '+safe(f.std)+'</td><td>'+safe(f.eta)+' / '+safe(f.etd)+'</td><td>'+statusTag(f.status)+'</td><td>'+safe(f.stand||'Unassigned')+'</td><td><div class="actions">'+controls.join('')+'</div></td></tr>';
+ }).join('')||'<tr><td colspan="7">No flights visible for this department or date.</td></tr>';
+ document.querySelectorAll('[data-stand]').forEach(function(el){var f=data.flights.find(function(x){return x.id===el.dataset.stand});if(f)el.value=f.stand||''});
+ document.querySelector('#flightForm button[type=submit]').disabled=!can('flights:create');
+ document.querySelector('#flightForm').style.display=can('flights:create')?'grid':'none';
+}
+function renderPrivate(){
+ var rows=data.privateRows.filter(function(x){return x.org===user.org});
+ $('privateRows').innerHTML=rows.map(function(x){return '<tr><td>'+safe(x.flight)+'</td><td>'+safe(x.route)+'</td><td>'+safe(x.time)+'</td><td>'+safe(x.note)+'</td><td><button class="btn" data-act="send-private" data-id="'+safe(x.id)+'">Submit this flight to Ops</button> <button class="btn danger" data-act="delete-private" data-id="'+safe(x.id)+'">Delete local row</button></td></tr>'}).join('')||'<tr><td colspan="5">No private rows for your airline.</td></tr>';
+}
+function renderGa(){
+ var rows=data.ga.filter(function(g){return user.role!=='FBO'||g.org===user.org});
+ $('gaRows').innerHTML='<div class="cards">'+rows.map(function(g){return '<article class="record"><h4>'+safe(g.registration)+' · '+safe(g.spot)+' '+statusTag(g.status)+'</h4><p>'+safe(g.aircraft)+' · '+safe(g.operator)+'</p><small>'+safe(g.start)+' to '+safe(g.end)+'</small>'+(can('ga:edit')?'<div class="actions"><select data-ga-status="'+safe(g.id)+'"><option>Reserved</option><option>On stand</option><option>Departed</option></select><button class="btn" data-act="save-ga" data-id="'+safe(g.id)+'">Save status</button></div>':'')+'</article>'}).join('')+'</div>';
+ document.querySelectorAll('[data-ga-status]').forEach(function(el){var g=data.ga.find(function(x){return x.id===el.dataset.gaStatus});if(g)el.value=g.status});
+ $('gaForm').style.display=can('ga:edit')?'grid':'none';
+ $('gaSpotSelect').innerHTML=Array.from({length:9},function(_,i){return '<option>G'+(i+1)+'</option>'}).join('');
+}
