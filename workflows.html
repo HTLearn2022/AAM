@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Airport Airside Manager: fictional issues, permits and NOTAM request workflows.">
+<title>AAM | Issues, Permits and NOTAM Requests</title>
+<style>
+:root{--navy:#102d52;--blue:#155e9c;--ink:#213451;--muted:#667993;--line:#dbe4ee;--bg:#f2f6fa}
+*{box-sizing:border-box}body{background:var(--bg);margin:0;color:var(--ink);font:14px/1.5 system-ui,"Segoe UI",Arial,sans-serif}
+header{background:var(--navy);color:white;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+header b{font-size:19px}header small{display:block;font-size:11px;color:#b9d6ef}
+header a{color:#e7f2ff;text-decoration:none;font-size:12px;font-weight:bold;margin-right:12px}
+header select{border-radius:8px;padding:8px;border:0}
+main{max-width:1200px;margin:auto;padding:22px 20px 40px}
+.hero{background:linear-gradient(115deg,#113d71,#26659a);color:#fff;border-radius:15px;padding:23px}
+.hero h1{margin:0 0 7px;font-size:26px}.hero p{margin:0;color:#e0edfa}
+.notice{background:#fff7d9;border:1px solid #e6d18b;color:#71530b;padding:11px 13px;border-radius:9px;margin:15px 0;font-size:12px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.metric,.panel{border:1px solid var(--line);border-radius:13px;background:#fff}
+.metric{padding:15px}.metric b{font-size:26px;display:block}.metric span{color:var(--muted);font-size:11px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0}.tabs button{border:1px solid #c8d7e7;background:#fff;color:#2a5179;font-weight:750;border-radius:9px;padding:11px 15px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--blue);color:white}
+.view{display:none}.view.active{display:block}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);gap:14px}.panel{padding:18px;margin-bottom:13px;min-width:0}
+.panel h2{font-size:17px;margin:0 0 8px}.help{color:var(--muted);font-size:12px;margin:0 0 14px}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.full{grid-column:1/-1}
+label{font-size:12px;font-weight:750;color:#465f7d}input,select,textarea{font:inherit;display:block;width:100%;padding:9px;margin-top:5px;border-radius:8px;border:1px solid #c9d7e6;color:#213451;background:#fff}
+textarea{min-height:84px;resize:vertical}
+button.action{border:1px solid var(--blue);background:var(--blue);color:white;border-radius:8px;padding:9px 13px;font:inherit;font-weight:750;cursor:pointer}
+button.small{border:1px solid #c5d6e5;background:#f4f8fc;color:#23527e;border-radius:8px;padding:7px 10px;font:inherit;font-weight:700;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.list{display:grid;gap:10px}.record{border:1px solid #dce6ee;background:#fcfdff;border-radius:10px;padding:13px}
+.record h3{margin:0 0 7px;font-size:13px}.record p{margin:5px 0;color:#455b75;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}.record small{display:block;color:var(--muted);margin:7px 0}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.controls select{width:auto;max-width:180px}
+.pill{display:inline-block;border-radius:6px;padding:3px 7px;background:#e7f0fb;color:#24537e;font-size:11px}
+.pill.warning{background:#ffebdf;color:#9f351c}
+.audititem{color:#516b85;font-size:12px;padding:8px;border-bottom:1px solid #edf2f7}
+footer{margin-top:20px;border-top:1px solid var(--line);padding-top:15px;font-size:12px;color:var(--muted)}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:550px){.form,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div><b>Airport Airside Manager (AAM)</b><small>JSR COMMUNICATIONS · FICTIONAL JIA WORKFLOWS</small></div>
+<div><a href="index.html">← Operations Hub</a><a href="assignments.html">Daily Assignments</a><label style="color:#d5e8fa">Viewing as <select id="role"><option value="Operations">Airport Operations</option><option>Airline</option><option>Ground Handler</option><option>Maintenance</option><option>ATC</option><option>Manager</option><option>Communications</option></select></label></div></header>
+<main>
+<div class="hero"><h1>Issues, Permits &amp; NOTAM Requests</h1><p>Demonstrating connected reporting, responsibility, approval and follow-up workflows as part of the wider AAM airport operations platform.</p></div>
+<div class="notice"><b>Demo only:</b> All airport data are invented. Role switching is not secure authentication. Actions are saved to this browser only. No official permits, NOTAMs or external messages are issued, approved or transmitted.</div>
+<div class="metrics"><div class="metric"><b id="cIssues">0</b><span>Open issues</span></div><div class="metric"><b id="cOverdue">0</b><span>Overdue issues</span></div><div class="metric"><b id="cPermits">0</b><span>Approved / active permits</span></div><div class="metric"><b id="cNotams">0</b><span>NOTAM requests pending review</span></div></div>
+<nav class="tabs" aria-label="Workflow sections"><button type="button" data-tab="issues" aria-selected="true">Issues &amp; defects</button><button type="button" data-tab="permits" aria-selected="false">Permits</button><button type="button" data-tab="notams" aria-selected="false">NOTAM requests</button></nav>
+<section class="view active" id="issues"><div class="grid">
+<div class="panel"><h2>Issue register</h2><p class="help">Assign an owner, record resolution and require an Operations sign-off. Overdue status is based on the entered due date.</p><div class="list" id="issueList"></div></div>
+<div class="panel"><h2>Report an issue</h2><form id="issueForm" class="form">
+<label>Location<input name="location" required maxlength="90" placeholder="Stand 4"></label><label>Category<select name="category"><option>Lighting</option><option>FOD</option><option>Surface</option><option>Equipment</option><option>Terminal</option><option>Other</option></select></label>
+<label>Severity<select name="severity"><option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option></select></label><label>Reported by<input name="reporter" required maxlength="90"></label>
+<label>Assign owner<select name="owner"><option value="">Unassigned</option><option>Maintenance</option><option>Airport Operations</option><option>Terminal Team</option><option>Airfield Team</option><option>Ground Handling</option></select></label><label>Due by<input name="due" type="datetime-local"></label>
+<label class="full">Description<textarea name="description" required maxlength="700"></textarea></label><div class="full"><button class="action" type="submit">Log fictional issue</button></div>
+</form></div></div></section>
+<section class="view" id="permits"><div class="grid">
+<div class="panel"><h2>Permit register</h2><p class="help">Illustrative sequence: Requested → Approved → Active → Closed. Not an actual permit authorisation.</p><div class="list" id="permitList"></div></div>
+<div class="panel"><h2>New permit request</h2><form id="permitForm" class="form">
+<label>Type<select name="type"><option>Hot works</option><option>Airside works</option><option>Vehicle / access</option><option>Other</option></select></label>
+<label>Work location<input name="location" required maxlength="100"></label><label>Requested by<input name="requester" required maxlength="90"></label>
+<label>Department<select name="department"><option>Maintenance</option><option>Airport Operations</option><option>Contractor</option><option>Ground Handling</option></select></label>
+<label class="full">Scope and precautions<textarea name="description" required maxlength="700"></textarea></label><div class="full"><button class="action" type="submit">Create demo permit request</button></div>
+</form></div></div></section>
+<section class="view" id="notams"><div class="grid">
+<div class="panel"><h2>NOTAM request register</h2><p class="help">Internal requests only. The final step is marked “Ready for AIS (not sent)”. The authorised AIS service remains responsible for issuing real NOTAMs.</p><div class="list" id="notamList"></div></div>
+<div class="panel"><h2>Prepare NOTAM request</h2><form id="notamForm" class="form">
+<label>Subject<select name="subject"><option>Runway</option><option>Taxiway</option><option>Apron</option><option>Lighting</option><option>Obstacle</option><option>Other</option></select></label><label>Location<input name="location" required maxlength="90" placeholder="RWY 06/24"></label>
+<label>Requested by<input name="requester" required maxlength="90"></label><label>Priority<select name="priority"><option>Routine</option><option>Urgent</option></select></label>
+<label>From (UTC)<input name="from" type="datetime-local"></label><label>To (UTC)<input name="to" type="datetime-local"></label>
+<label class="full">Proposed NOTAM text<textarea name="description" required maxlength="750"></textarea></label><div class="full"><button class="action" type="submit">Submit internal demo request</button></div>
+</form></div></div></section>
+<div class="panel"><h2>Local activity history</h2><p class="help">A demonstration audit history stored only in this browser.</p><div id="auditList"></div></div>
+<footer>Airport Airside Manager (AAM) by JSR Communications · Fictional JIA demonstration · Not for operational decision-making</footer>
+</main>
+<script>
+(function(){
+'use strict';
+var KEY='aam-demo-workflows-v1';
+var find=function(id){return document.getElementById(id)};
+var sample=function(){return {issues:[{id:'JI-001',location:'Stand 4',category:'Lighting',severity:'High',reporter:'Duty Officer',owner:'Maintenance',due:'',description:'Fictional apron light reported unserviceable.',status:'Open'}],permits:[{id:'JP-001',type:'Hot works',location:'Cargo Hangar',requester:'Maintenance',department:'Maintenance',description:'Fictional welding task with safety controls to review.',status:'Requested'}],notams:[{id:'JN-001',subject:'Taxiway',location:'Taxiway C',requester:'Airport Operations',priority:'Routine',from:'',to:'',description:'Fictional taxiway surface inspection.',status:'Awaiting review'}],audit:[]}};
+var data;
+try{data=JSON.parse(localStorage.getItem(KEY)||'null')||sample()}catch(e){data=sample()}
+if(!Array.isArray(data.issues)||!Array.isArray(data.permits)||!Array.isArray(data.notams)||!Array.isArray(data.audit))data=sample();
+var role='Operations';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){console.warn('Demo storage unavailable')}}
+function log(action){data.audit.unshift({at:new Date().toISOString(),role:role,action:action});data.audit=data.audit.slice(0,25)}
+function item(tag,cl,text){var el=document.createElement(tag);if(cl)el.className=cl;if(text!=null)el.textContent=text;return el}
+function time(v){return v?new Date(v).toLocaleString('en-GB',{dateStyle:'short',timeStyle:'short'}):'Not set'}
+function overdue(x){return x.status!=='Closed'&&x.due&&new Date(x.due).getTime()<Date.now()}
+function canChange(){return role==='Operations'}
+function addAction(parent,caption,func){var b=item('button','small',caption);b.type='button';b.addEventListener('click',func);parent.appendChild(b)}
+function render(){
+find('cIssues').textContent=data.issues.filter(function(x){return x.status!=='Closed'}).length;
+find('cOverdue').textContent=data.issues.filter(overdue).length;
+find('cPermits').textContent=data.permits.filter(function(x){return x.status==='Approved'||x.status==='Active'}).length;
+find('cNotams').textContent=data.notams.filter(function(x){return x.status==='Awaiting review'}).length;
+['issues','permits','notams'].forEach(function(kind){
+var box=find(kind==='issues'?'issueList':kind==='permits'?'permitList':'notamList');box.replaceChildren();
+data[kind].forEach(function(x){
+var card=item('div','record'),head=item('h3','',x.id+' · '+(x.location||'No location')),tag=item('span','pill'+(overdue(x)?' warning':''),overdue(x)?'Overdue':x.status);
+head.appendChild(document.createTextNode(' '));head.appendChild(tag);card.appendChild(head);
+card.appendChild(item('p','',x.description||''));var details=kind==='issues'?'Severity: '+x.severity+' · Owner: '+(x.owner||'Unassigned')+' · Due: '+time(x.due):kind==='permits'?x.type+' · '+x.department:x.subject+' · '+x.priority;
+card.appendChild(item('small','',details));
+var ctl=item('div','controls');
+if(kind==='issues'){
+if(canChange()&&x.status==='Open'){
+var select=item('select');['','Maintenance','Airport Operations','Terminal Team','Airfield Team','Ground Handling'].forEach(function(v){var o=item('option','',v||'Unassigned');o.value=v;o.selected=x.owner===v;select.appendChild(o)});
+select.addEventListener('change',function(){x.owner=select.value;log('Assigned '+x.id+' to '+(x.owner||'unassigned'));save();render()});ctl.appendChild(select)}
+if(x.status==='Open'&&x.owner&&(canChange()||(role==='Maintenance'&&x.owner==='Maintenance')))addAction(ctl,'Mark resolved',function(){x.status='Resolved';log('Resolved '+x.id);save();render()});
+if(x.status==='Resolved'&&canChange())addAction(ctl,'Operations sign-off',function(){x.status='Closed';log('Signed off '+x.id);save();render()});
+}else if(kind==='permits'&&canChange()&&x.status!=='Closed')addAction(ctl,x.status==='Requested'?'Approve (demo)':x.status==='Approved'?'Activate (demo)':'Close (demo)',function(){x.status=x.status==='Requested'?'Approved':x.status==='Approved'?'Active':'Closed';log('Permit '+x.id+': '+x.status);save();render()});
+else if(kind==='notams'&&canChange()&&(x.status==='Awaiting review'||x.status==='Reviewed'))addAction(ctl,x.status==='Awaiting review'?'Mark reviewed':'Ready for AIS (not sent)',function(){x.status=x.status==='Awaiting review'?'Reviewed':'Ready for AIS (not sent)';log('NOTAM request '+x.id+': '+x.status);save();render()});
+card.appendChild(ctl);box.appendChild(card)
+});
+if(!data[kind].length)box.appendChild(item('p','help','No records yet.'))});
+var audit=find('auditList');audit.replaceChildren();
+data.audit.slice(0,12).forEach(function(a){audit.appendChild(item('div','audititem',time(a.at)+' · '+a.role+' — '+a.action))});
+if(!data.audit.length)audit.appendChild(item('p','help','No actions recorded yet.'));
+document.querySelectorAll('form button[type=submit]').forEach(function(b){b.disabled=role==='Manager'});
+}
+function switchTab(name){if(['issues','permits','notams'].indexOf(name)<0)name='issues';document.querySelectorAll('[data-tab]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.tab===name))});document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('active',v.id===name)})}
+document.querySelectorAll('[data-tab]').forEach(function(b){b.addEventListener('click',function(){location.hash=b.dataset.tab;switchTab(b.dataset.tab)})});
+window.addEventListener('hashchange',function(){switchTab(location.hash.slice(1))});
+find('role').addEventListener('change',function(e){role=e.target.value;render()});
+[['issueForm','issues','JI'],['permitForm','permits','JP'],['notamForm','notams','JN']].forEach(function(config){
+find(config[0]).addEventListener('submit',function(e){e.preventDefault();if(role==='Manager')return;
+var values=Object.fromEntries(new FormData(e.target));values.id=config[2]+'-'+Math.random().toString(36).slice(2,8).toUpperCase();values.status=config[1]==='issues'?'Open':config[1]==='permits'?'Requested':'Awaiting review';
+data[config[1]].unshift(values);log('Created '+values.id);save();e.target.reset();render()})
+});
+switchTab(location.hash.slice(1));render();
+})();
+</script>
+</body></html>
