@@ -49,3 +49,14 @@ dialog{border:1px solid #c6d8e8;border-radius:14px;padding:24px;max-width:min(90
 .tab-button.active{background:#155e9a;color:#fff;border-color:#155e9a}
 #loginOverlay[hidden]{display:none!important}
 @media(max-width:850px){.shell.collapsed{display:block}.shell.collapsed .sidebar{padding:14px}.shell.collapsed .brand{display:block}.shell.collapsed .nav-link{font-size:12px;line-height:1.5;padding:10px}.shell.collapsed .nav-link em{font-size:14px;margin-right:6px}}
+
+/* Integrated mode: the original AAM dashboard owns the sidebar, title and account picker. */
+body.embed{background:#f3f6fb}
+body.embed .shell{display:block;min-height:0;max-width:none}
+body.embed .sidebar{display:none!important}
+body.embed .content{padding:12px 12px 22px;max-width:none;margin:0;width:100%}
+body.embed .top{display:none!important}
+body.embed .demo-label{display:none!important}
+body.embed .panel{border-radius:11px}
+body.embed footer{font-size:11px}
+@media(max-width:700px){body.embed .content{padding:8px}}
