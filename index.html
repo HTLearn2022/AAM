@@ -309,9 +309,22 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
    $$('unmappedStands').hidden=!unmapped.length;
    $$('unmappedStands').textContent=unmapped.length?'Configured positions without a location on this schematic: '+unmapped.join(', ')+'. These remain in the assignment system.':'';
  }
- function read(){const s=safeRead('jia-stands-v1');const hasSave=Boolean(s&&Array.isArray(s.flights));const flights=hasSave?s.flights:fallback;const date=hasSave&&/^\d{4}-\d{2}-\d{2}$/.test(s.date||'')?s.date:[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,'0'),String(new Date().getDate()).padStart(2,'0')].join('-');const stands=hasSave&&Array.isArray(s.rules?.stands)?s.rules.stands.map(x=>x[0]):['Stand 1','Stand 2','Stand 3','Stand 4','Stand 5','Stand 6','Stand 7L','Stand 7','Stand 8','Stand 9','Stand 10','Cargo'];const gaCount=hasSave&&Array.isArray(s.ga)?s.ga.length:4;return{flights,date,stands,gaCount,ga:hasSave&&Array.isArray(s.ga)?s.ga:[],turn:hasSave?Number(s.rules?.turn??45):45,buffer:hasSave?Number(s.rules?.buffer??10):10,hasSave}}
+ function read(){
+   // The integrated departmental simulator is the source of truth after it has
+   // been opened. Earlier standalone assignment data remain as the fallback.
+   const demo=safeRead('aam-jia-connected-v1');
+   if(demo&&demo.version===1&&Array.isArray(demo.flights)&&Array.isArray(demo.users)){
+     let chosen='u-ops';try{chosen=sessionStorage.getItem('aam-jia-account-v1')||chosen}catch(e){}
+     const account=demo.users.find(u=>u.id===chosen&&u.active);
+     const airline=account?.role==='Airline';
+     const date=/^\d{4}-\d{2}-\d{2}$/.test(demo.date||'')?demo.date:'2026-11-20';
+     const flights=demo.flights.filter(f=>f.date===date&&f.status==='Accepted'&&(!airline||f.org===account.org)).map(f=>({flight:f.number,ac:f.aircraft,eta:f.eta,etd:f.etd,sta:f.sta,std:f.std,stand:f.stand,category:f.category}));
+     const stays=(demo.ga||[]).filter(g=>!account||account.role!=='FBO'||g.org===account.org).map(g=>({...g,reg:g.registration,arr:g.start,dep:g.end,status:g.status==='On stand'?'On the ground':g.status}));
+     return {flights,date,stands:['Stand 1','Stand 2','Stand 3','Stand 4','Stand 5','Stand 6','Stand 7L','Stand 7','Stand 8','Stand 9','Stand 10','Cargo'],gaCount:stays.length,ga:stays,turn:45,buffer:10,hasSave:true,integrated:true}
+   }
+   const s=safeRead('jia-stands-v1');const hasSave=Boolean(s&&Array.isArray(s.flights));const flights=hasSave?s.flights:fallback;const date=hasSave&&/^\d{4}-\d{2}-\d{2}$/.test(s.date||'')?s.date:[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,'0'),String(new Date().getDate()).padStart(2,'0')].join('-');const stands=hasSave&&Array.isArray(s.rules?.stands)?s.rules.stands.map(x=>x[0]):['Stand 1','Stand 2','Stand 3','Stand 4','Stand 5','Stand 6','Stand 7L','Stand 7','Stand 8','Stand 9','Stand 10','Cargo'];const gaCount=hasSave&&Array.isArray(s.ga)?s.ga.length:4;return{flights,date,stands,gaCount,ga:hasSave&&Array.isArray(s.ga)?s.ga:[],turn:hasSave?Number(s.rules?.turn??45):45,buffer:hasSave?Number(s.rules?.buffer??10):10,hasSave}}
  function paint(){const state=read(), t=minutes($$('viewTime').value)||0, flights=state.flights;
-  $$('dataLabel').textContent=state.hasSave?'Showing saved assignments from this browser':'Illustrative sample activity — open Assignments to load your own sample';
+  $('dataLabel').textContent=state.integrated?'Showing integrated JIA departmental records from this browser':state.hasSave?'Showing saved standalone assignments from this browser':'Illustrative sample activity — open Assignments to load your own sample';
   $$('flightCount').textContent=flights.length;
   $$('assignedCount').textContent=flights.filter(f=>Boolean(f.stand)).length;
   $$('assignedHint').textContent=state.hasSave?'From your saved assignment rows':'Pre-filled illustration';
