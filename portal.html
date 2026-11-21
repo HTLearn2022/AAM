@@ -25,12 +25,32 @@
 <div class="hero"><h2>JIA Operations Hub</h2><p>One shared demonstration workspace for flight requests, stand assignments, inspection findings, defects, permit approvals and NOTAM requests. Switch between fictional department accounts to see the differences.</p></div>
 <div class="panel"><div class="panel-head"><h3>Operating day</h3><label class="field">Date <input id="operatingDate" type="date"></label></div><p class="hint">Use the same fictional working day across flights, GA stays, inspections and the apron display.</p></div>
 <div class="metrics" id="dashboardMetrics"></div>
-<section class="aam-full-width-apron" aria-label="Standalone apron map">
-<div class="panel"><h3>Apron occupancy · assignment-linked</h3><div class="actions"><label class="field">View time <input id="viewTime" type="time" value="12:30"></label><button class="btn" data-action="reset-time">12:30 sample</button></div>
-<div class="map-wrap"><div class="map-graphic"><img src="assets/jia-demo-apron.svg" alt="Original fictional JIA apron with contact stands, remote parking, GA and cargo positions"><div id="mapPins"></div></div>
-<div><h4>Selected position</h4><div class="map-data" id="mapDetail">Choose a stand.</div><p class="hint">Green = available; amber = occupied; red = conflicting. Invented schematic, not to scale.</p></div></div>
-</div>
-</section>
+<section class="panel" style="margin-top:14px" aria-label="Interactive fictional apron map">
+    <div class="panel-h"><h3>JIA apron map · assignment-linked</h3><small>Fictional schematic · not to scale · reflects selected viewing time</small></div>
+    <div class="time-row"><label for="viewTime">View time</label><input id="viewTime" type="time" value="12:30"><button id="resetTime" data-act="reset-time" type="button">12:30 sample</button></div>
+    <div class="map-layout">
+      <div class="map-viewport"><div class="map-figure" id="apronFigure">
+        <img src="assets/jia-demo-apron.svg" alt="Invented airport schematic showing contact stands 1 to 6, stand 7L, remote stands 7 to 10, general aviation positions G1 to G9 and a cargo apron." loading="lazy">
+        <div id="mapPins" aria-label="Select an apron position for flight or GA occupancy details"></div>
+      </div></div>
+      <aside class="map-info" aria-label="Map status and selection">
+        <h4>Apron position details</h4>
+        <p>Choose any stand or GA position on the map. Its displayed status comes from the saved assignments and the selected viewing time.</p>
+        <div id="mapSelection" class="detail" role="status" aria-live="polite">Select a position on the map to inspect its assignment.</div>
+        <div class="map-legend" aria-label="Position status legend">
+          <span><i class="free"></i> Available</span>
+          <span><i class="busy"></i> Occupied</span>
+          <span><i class="conflict"></i> Conflicting assignments</span>
+          <span><i class="reserve"></i> GA stay reserved / recorded</span>
+          <span><i class="off"></i> Not configured in current rules</span>
+        </div>
+        <div class="map-summary" id="mapSummary"></div>
+        <p class="unmapped" id="unmappedStands" hidden></p>
+        <p><a href="assignments.html" style="color:#165791;font-weight:800">Edit stand rules and assignments →</a></p>
+      </aside>
+    </div>
+    <div class="note">The map is an invented JIA illustration. Positions reflect the demonstration rules and browser-saved assignments; no aircraft location service, operational clearance or actual airport geometry is represented.</div>
+  </section>
 <div class="two"><div class="panel"><h3>Accepted flight movements</h3><div id="dashboardFlights"></div></div><div class="panel"><h3>Operational handovers</h3><div id="dashboardWork"></div></div></div>
 <section class="aam-airport-weather" aria-label="Fictional airport weather">
 <div class="panel-head"><h3>Weather &amp; aviation information</h3><span class="tag">Fictional conditions · sample reports</span></div>
