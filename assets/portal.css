@@ -60,3 +60,11 @@ body.embed .demo-label{display:none!important}
 body.embed .panel{border-radius:11px}
 body.embed footer{font-size:11px}
 @media(max-width:700px){body.embed .content{padding:8px}}
+
+/* Restored pre-roleplay dashboard composition: apron is a dedicated full-width panel. */
+.aam-full-width-apron{width:100%;margin-top:3px}
+.aam-full-width-apron .map-graphic{max-width:760px}
+.aam-airport-weather{margin:22px 0 8px}
+.aam-airport-weather .panel-head{padding:0 2px;margin-bottom:12px}
+.aam-airport-weather .wxgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:640px){.aam-airport-weather .wxgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
