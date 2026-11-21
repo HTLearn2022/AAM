@@ -141,25 +141,32 @@ function renderMap(){
  var pins=$('mapPins'),time=$('viewTime').value||'12:30';
  pins.replaceChildren();
  var accepted=data.flights.filter(function(f){return f.date===data.date&&f.status==='Accepted'&&(!isAirline()||f.org===user.org)});
+ var counts={occupied:0,available:0,conflict:0,reserved:0};
  MAP.forEach(function(entry){
    var key=entry[0],related=accepted.filter(function(f){return f.stand===key});
    var occupied=related.filter(function(f){return activeOnStand(f,time)});
-   var clash=false;for(var i=0;i<related.length;i++)for(var j=i+1;j<related.length;j++)if(overlaps(related[i],related[j]))clash=true;
+   var clash=false;
+   for(var i=0;i<related.length;i++)for(var j=i+1;j<related.length;j++)if(overlaps(related[i],related[j]))clash=true;
    var stays=data.ga.filter(function(g){return g.spot===key&&g.start<=data.date&&g.end>=data.date&&g.status!=='Departed'});
-   var state=clash||stays.length>1?'clash':occupied.length||stays.some(function(g){return g.status==='On stand'})?'busy':'free';
-   var b=document.createElement('button');b.type='button';b.className='map-pin '+(state==='busy'?'busy':state==='clash'?'clash':'');
-   b.style.left=entry[1]+'%';b.style.top=entry[2]+'%';b.title=key+' — '+state;b.setAttribute('aria-label',key+' '+state);
-   b.setAttribute('aria-pressed',String(key===selectedStand));b.textContent=state==='clash'?'!':occupied.length?occupied[0].number:stays.length?stays[0].registration:'✓';
+   var state=clash||stays.length>1?'conflict':occupied.length||stays.some(function(g){return g.status==='On stand'})?'occupied':stays.length?'reserved':'available';
+   counts[state]++;
+   var b=document.createElement('button');b.type='button';b.className='map-pin '+state;
+   b.style.left=entry[1]+'%';b.style.top=entry[2]+'%';
+   b.title=key+' — '+state;b.setAttribute('aria-label',key+' '+state);
+   b.setAttribute('aria-pressed',String(key===selectedStand));
+   b.textContent=state==='conflict'?'!':occupied.length?occupied[0].number:stays.length?stays[0].registration:'✓';
    b.addEventListener('click',function(){selectedStand=key;renderMap()});pins.append(b);
    if(key===selectedStand){
-    var bits=[key+' · '+(clash?'CONFLICT':occupied.length?'OCCUPIED':stays.length?'RESERVED / GA':'AVAILABLE')];
+    var bits=[key+' — '+state.toUpperCase()];
     occupied.forEach(function(f){bits.push(f.number+' ('+f.aircraft+') · '+f.eta+'–'+f.etd)});
     related.filter(function(f){return !activeOnStand(f,time)}).forEach(function(f){bits.push('Other assignment: '+f.number+' '+f.eta+'–'+f.etd)});
     stays.forEach(function(g){bits.push(g.registration+' · '+g.status+' · '+g.start+' to '+g.end)});
     if(bits.length===1)bits.push('No recorded assignment at the selected time.');
-    $('mapDetail').textContent=bits.join('\n');
+    $('mapSelection').textContent=bits.join('\n');
    }
  });
+ $('mapSummary').textContent=counts.occupied+' occupied · '+counts.available+' available · '+counts.conflict+' conflicts · '+counts.reserved+' GA reservations';
+ $('unmappedStands').hidden=true;
 }
 function renderFlights(){
  var rows=filteredFlights().slice().sort(function(a,b){return (a.sta||'').localeCompare(b.sta||'')});
