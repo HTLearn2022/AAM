@@ -325,7 +325,7 @@ main{min-width:0;padding:26px 32px 38px}.topline{display:flex;justify-content:sp
    }
    const s=safeRead('jia-stands-v1');const hasSave=Boolean(s&&Array.isArray(s.flights));const flights=hasSave?s.flights:fallback;const date=hasSave&&/^\d{4}-\d{2}-\d{2}$/.test(s.date||'')?s.date:[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,'0'),String(new Date().getDate()).padStart(2,'0')].join('-');const stands=hasSave&&Array.isArray(s.rules?.stands)?s.rules.stands.map(x=>x[0]):['Stand 1','Stand 2','Stand 3','Stand 4','Stand 5','Stand 6','Stand 7L','Stand 7','Stand 8','Stand 9','Stand 10','Cargo'];const gaCount=hasSave&&Array.isArray(s.ga)?s.ga.length:4;return{flights,date,stands,gaCount,ga:hasSave&&Array.isArray(s.ga)?s.ga:[],turn:hasSave?Number(s.rules?.turn??45):45,buffer:hasSave?Number(s.rules?.buffer??10):10,hasSave}}
  function paint(){const state=read(), t=minutes($$('viewTime').value)||0, flights=state.flights;
-  $('dataLabel').textContent=state.integrated?'Showing integrated JIA departmental records from this browser':state.hasSave?'Showing saved standalone assignments from this browser':'Illustrative sample activity — open Assignments to load your own sample';
+  $$('dataLabel').textContent=state.integrated?'Showing integrated JIA departmental records from this browser':state.hasSave?'Showing saved standalone assignments from this browser':'Illustrative sample activity — open Assignments to load your own sample';
   $$('flightCount').textContent=flights.length;
   $$('assignedCount').textContent=flights.filter(f=>Boolean(f.stand)).length;
   $$('assignedHint').textContent=state.hasSave?'From your saved assignment rows':'Pre-filled illustration';
