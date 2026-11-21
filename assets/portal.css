@@ -34,3 +34,78 @@ dialog{border:1px solid #c6d8e8;border-radius:14px;padding:24px;max-width:min(90
 @media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;gap:10px;padding:14px}.sidebar-note{display:none}#navLinks{display:flex;overflow:auto;gap:5px}.nav-link{flex:none;padding:10px}.two,.two-even,.map-wrap{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.metrics,.form,.permission-grid,.role-picker,.wxgrid{grid-template-columns:1fr}.content{padding:13px}.login-card{padding:18px}.top h1{font-size:21px}.map-pin{font-size:8px;padding:2px 3px}th,td{padding:8px}}
 @media print{.sidebar,.account,.btn,.form,.demo-label,#loginOverlay,.nav-link{display:none!important}.shell{display:block}.section{display:none!important}.section.active{display:block!important}body{background:#fff}.panel{break-inside:avoid}}
+
+
+/* Collapsible departmental navigation. */
+.sidebar .collapse-control{align-self:flex-end;background:#203d63;color:white;border:1px solid #52769f;border-radius:8px;padding:7px 11px;font-weight:800;font-size:16px;cursor:pointer}
+.shell.collapsed{grid-template-columns:74px minmax(0,1fr)}
+.shell.collapsed .sidebar{padding:16px 8px}
+.shell.collapsed .brand,.shell.collapsed .nav-title,.shell.collapsed .sidebar-note{display:none}
+.shell.collapsed .nav-link{font-size:0;line-height:1;text-align:center;padding:13px 7px}
+.shell.collapsed .nav-link em{font-size:20px;margin:0}
+.shell.collapsed .sidebar .collapse-control{align-self:center}
+.tab-strip{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+.tab-button{border:1px solid #c7d7e7;border-radius:9px;background:#fff;padding:10px 15px;color:#224e7e;font-weight:750}
+.tab-button.active{background:#155e9a;color:#fff;border-color:#155e9a}
+#loginOverlay[hidden]{display:none!important}
+@media(max-width:850px){.shell.collapsed{display:block}.shell.collapsed .sidebar{padding:14px}.shell.collapsed .brand{display:block}.shell.collapsed .nav-link{font-size:12px;line-height:1.5;padding:10px}.shell.collapsed .nav-link em{font-size:14px;margin-right:6px}}
+
+/* Integrated mode: the original AAM dashboard owns the sidebar, title and account picker. */
+body.embed{background:#f3f6fb}
+body.embed .shell{display:block;min-height:0;max-width:none}
+body.embed .sidebar{display:none!important}
+body.embed .content{padding:12px 12px 22px;max-width:none;margin:0;width:100%}
+body.embed .top{display:none!important}
+body.embed .demo-label{display:none!important}
+body.embed .panel{border-radius:11px}
+body.embed footer{font-size:11px}
+@media(max-width:700px){body.embed .content{padding:8px}}
+
+/* Restored pre-roleplay dashboard composition: apron is a dedicated full-width panel. */
+.aam-full-width-apron{width:100%;margin-top:3px}
+.aam-full-width-apron .map-graphic{max-width:760px}
+.aam-airport-weather{margin:22px 0 8px}
+.aam-airport-weather .panel-head{padding:0 2px;margin-bottom:12px}
+.aam-airport-weather .wxgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:640px){.aam-airport-weather .wxgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* Canonical JIA apron map presentation copied from the approved pre-roleplay AAM dashboard. */
+.section[data-page="dashboard"]>.panel[aria-label="Interactive fictional apron map"]{padding:0;overflow:hidden;margin:15px 0}
+.panel-h{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.panel-h h3{font-size:15px;margin:0}
+.panel-h small{color:var(--muted);font-size:11px}
+.time-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:14px 16px;background:#f8faff;border-bottom:1px solid var(--line);font-size:12px}
+.time-row label{font-weight:750;color:#3a5575}
+.time-row input{padding:8px 10px;border:1px solid #c9d7e9;border-radius:9px;background:white;min-height:39px}
+.time-row button{border:1px solid #c9d7e9;border-radius:9px;padding:8px 10px;color:#1b4c85;background:white;cursor:pointer;font-size:12px;font-weight:750}
+.note{padding:12px 16px;font-size:11px;color:#63758a;background:#fcfdff;border-top:1px solid var(--line)}
+.map-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(240px,.9fr);gap:0}
+.map-viewport{padding:16px;background:#eef3f8}
+.map-figure{max-width:780px;margin:0 auto;position:relative}
+.map-figure img{display:block;width:100%;height:auto;border-radius:9px;border:1px solid #d5dde7}
+.map-pin{position:absolute;transform:translate(-50%,-50%);z-index:1;min-width:25px;min-height:25px;padding:4px 6px;border-radius:8px;border:2px solid #fff;box-shadow:0 2px 7px #0a254955;display:grid;place-items:center;cursor:pointer;font-size:10px;font-weight:850;line-height:1.12;max-width:90px;white-space:nowrap}
+.map-pin.available{background:#e3f9eb;color:#086b38;border-color:#2fa164}
+.map-pin.occupied{background:#fff0c7;color:#714500;border-color:#d89615}
+.map-pin.conflict{background:#ffe6e2;color:#a92019;border-color:#bd3027}
+.map-pin.reserved{background:#e6eeff;color:#184da1;border-color:#5985d6}
+.map-pin.inactive{background:#d9dfe7;color:#516071;border-color:#fff;opacity:.83}
+.map-pin:focus-visible{outline:3px solid #245da9;outline-offset:3px}
+.map-pin[aria-pressed="true"]{box-shadow:0 0 0 3px #153963,0 3px 12px #0a254966}
+.map-info{border-left:1px solid var(--line);padding:18px;background:#fbfcfe;color:#182640}
+.map-info h4{margin:0 0 8px;color:#152f53;font-size:15px}
+.map-info p{margin:0 0 12px;color:#586c84;font-size:12px}
+.map-info .detail{background:#fff;border:1px solid #dce5ee;border-radius:10px;padding:12px;margin:12px 0;font-size:13px;line-height:1.65;white-space:pre-line;overflow-wrap:anywhere;color:#1b3658;min-height:112px}
+.map-legend{display:grid;gap:8px;margin:16px 0;font-size:12px}
+.map-legend span{display:flex;align-items:center;gap:9px}
+.map-legend i{display:inline-block;width:14px;height:14px;border-radius:5px;border:2px solid #fff;box-shadow:0 0 0 1px #bdcad7}
+.map-legend i.free{background:#2fa164}
+.map-legend i.busy{background:#d89615}
+.map-legend i.conflict{background:#bd3027}
+.map-legend i.reserve{background:#5985d6}
+.map-legend i.off{background:#aab5c2}
+.map-summary{font-size:12px;color:#465e7c;background:#edf4fa;border-radius:9px;padding:11px;margin-top:14px}
+.unmapped{color:#8f4e04!important}
+
+@media(max-width:900px){.map-layout{grid-template-columns:1fr}.map-info{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:520px){.map-viewport{padding:7px}.map-pin{min-width:15px;min-height:16px;font-size:7px;padding:2px 3px;border-width:1px;border-radius:4px;max-width:45px}}
