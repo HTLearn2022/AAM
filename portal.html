@@ -25,14 +25,17 @@
 <div class="hero"><h2>JIA Operations Hub</h2><p>One shared demonstration workspace for flight requests, stand assignments, inspection findings, defects, permit approvals and NOTAM requests. Switch between fictional department accounts to see the differences.</p></div>
 <div class="panel"><div class="panel-head"><h3>Operating day</h3><label class="field">Date <input id="operatingDate" type="date"></label></div><p class="hint">Use the same fictional working day across flights, GA stays, inspections and the apron display.</p></div>
 <div class="metrics" id="dashboardMetrics"></div>
-<div class="two">
+<section class="aam-full-width-apron" aria-label="Standalone apron map">
 <div class="panel"><h3>Apron occupancy · assignment-linked</h3><div class="actions"><label class="field">View time <input id="viewTime" type="time" value="12:30"></label><button class="btn" data-action="reset-time">12:30 sample</button></div>
 <div class="map-wrap"><div class="map-graphic"><img src="assets/jia-demo-apron.svg" alt="Original fictional JIA apron with contact stands, remote parking, GA and cargo positions"><div id="mapPins"></div></div>
 <div><h4>Selected position</h4><div class="map-data" id="mapDetail">Choose a stand.</div><p class="hint">Green = available; amber = occupied; red = conflicting. Invented schematic, not to scale.</p></div></div>
 </div>
-<div class="panel"><h3>Fictional airport weather</h3><div class="wxgrid"><div><b>070° at 10 kt</b><small>Wind</small></div><div><b>10 km+</b><small>Visibility</small></div><div><b>FEW 2,000 ft</b><small>Cloud</small></div><div><b>29°C / 24°C</b><small>Temp / dew point</small></div><div><b>1014 hPa</b><small>QNH</small></div><div><b>No significant weather</b><small>Present weather</small></div></div><h4 style="margin-top:14px">Sample METAR</h4><code class="raw">METAR ZZZZ 201400Z 07010KT 9999 FEW020 29/24 Q1014=</code><h4>Sample TAF</h4><code class="raw">TAF ZZZZ 201100Z 2012/2112 08012KT 9999 SCT025 TEMPO 2018/2022 4000 SHRA BKN015=</code><div class="notice">Illustrative reports only: ZZZZ is a placeholder, not an actual JIA weather station.</div></div>
-</div>
+</section>
 <div class="two"><div class="panel"><h3>Accepted flight movements</h3><div id="dashboardFlights"></div></div><div class="panel"><h3>Operational handovers</h3><div id="dashboardWork"></div></div></div>
+<section class="aam-airport-weather" aria-label="Fictional airport weather">
+<div class="panel-head"><h3>Weather &amp; aviation information</h3><span class="tag">Fictional conditions · sample reports</span></div>
+<div class="panel"><h3>Fictional airport weather</h3><div class="wxgrid"><div><b>070° at 10 kt</b><small>Wind</small></div><div><b>10 km+</b><small>Visibility</small></div><div><b>FEW 2,000 ft</b><small>Cloud</small></div><div><b>29°C / 24°C</b><small>Temp / dew point</small></div><div><b>1014 hPa</b><small>QNH</small></div><div><b>No significant weather</b><small>Present weather</small></div></div><h4 style="margin-top:14px">Sample METAR</h4><code class="raw">METAR ZZZZ 201400Z 07010KT 9999 FEW020 29/24 Q1014=</code><h4>Sample TAF</h4><code class="raw">TAF ZZZZ 201100Z 2012/2112 08012KT 9999 SCT025 TEMPO 2018/2022 4000 SHRA BKN015=</code><div class="notice">Illustrative reports only: ZZZZ is a placeholder, not an actual JIA weather station.</div></div>
+</section>
 </section>
 <section class="section" data-page="flights">
 <div class="panel"><div class="panel-head"><h3>Flight requests &amp; official working schedule</h3><span class="tag">Airline requests require Operations acceptance</span></div><p class="hint">Airlines see only their own flights. Pending requests do not appear on the accepted movement board. Airlines may update ETA and ETD after acceptance; only Operations can allocate stands or alter official schedule status.</p><div class="table-wrap"><table><thead><tr><th>Flight / airline</th><th>Category / aircraft</th><th>STA / STD</th><th>ETA / ETD</th><th>Status</th><th>Stand / resources</th><th>Action</th></tr></thead><tbody id="flightRows"></tbody></table></div></div>
